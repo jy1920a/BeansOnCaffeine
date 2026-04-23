@@ -624,11 +624,11 @@
     .hcta{position:relative;overflow:hidden}
     .hcta::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(140,190,255,.18),transparent);transform:translateX(-120%);transition:transform .65s ease}
     .hcta:hover::before{transform:translateX(120%)}
-    .hero-chip{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;border:.5px solid rgba(255,255,255,.07);background:rgba(4,6,13,.42);backdrop-filter:blur(8px);color:rgba(225,224,204,.56);font-size:8px;letter-spacing:.14em;text-transform:uppercase;opacity:0;transform:translateY(18px);animation:fadeUp .6s ease forwards;box-shadow:0 0 18px rgba(0,0,0,.12)}
-    .hero-chip::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(140,190,255,.78);box-shadow:0 0 14px rgba(140,190,255,.32)}
-    .chip-1{top:16%;left:6.5%;animation-delay:.75s}
-    .chip-2{top:16%;right:6.5%;animation-delay:.9s}
-    .chip-3{bottom:26%;right:12%;animation-delay:1.05s}
+    
+    
+    
+    
+    
 
     .ccirc{width:34px;height:34px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;transition:transform .2s}
     .hcta:hover .ccirc{transform:scale(1.1)}
@@ -806,7 +806,7 @@
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
       .hdesc{text-align:left;max-width:100%}
-      .hero-chip{display:none}
+      
       .acard{padding:3rem 1.5rem}
       .hero-tag{top:1rem;left:1.2rem}
     }
@@ -836,9 +836,9 @@
       <div class="hero-grad-s"></div>
 
       <div class="hero-tag">// Featured Presentation</div>
-      <div class="hero-chip chip-1">AI · Deck Lab</div>
-      <div class="hero-chip chip-2">Tools in Motion</div>
-      <div class="hero-chip chip-3">Systems + Visuals</div>
+      
+      
+      
 
       <div class="hcontent">
         <div>
@@ -847,12 +847,7 @@
           </h1>
         </div>
         <div class="hright">
-          <div class="hdesc" id="heroDesc">
-            <p class="anim-line" data-delay="0">Over the last few years, building at</p>
-            <p class="anim-line" data-delay="180">the intersection of ERP systems,</p>
-            <p class="anim-line" data-delay="360">logistics operations, and AI workflows.</p>
-            <p class="anim-line hl" data-delay="540">Distilled into decks worth sharing.</p>
-          </div>
+          <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
           <a href="./main.html" class="hcta" id="heroCta" aria-label="Enter the Lab">
             Enter the Lab
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
@@ -1004,12 +999,7 @@
         } catch(e) {}
 
         setTimeout(() => {
-          // Trigger animated text lines
-          const lines = document.querySelectorAll('#heroDesc .anim-line');
-          lines.forEach((line, i) => {
-            const delay = parseInt(line.dataset.delay || 0);
-            setTimeout(() => line.classList.add('visible'), delay);
-          });
+          heroDesc.classList.add('show');
           heroCta.classList.add('show');
         }, 400);
         return;
