@@ -223,6 +223,9 @@
       </div>
 
       <div class="shint" id="scrollHint"><span>scroll</span><div class="sline"></div></div>
+      <div id="startPrompt" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 0.4s ease;">
+        <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(225,224,204,0.25);animation:sP 2s ease-in-out infinite;">click anywhere to start</span>
+      </div>
     </div>
   </section>
 
@@ -263,26 +266,15 @@
     let charIndex = 0;
     let currentHtml = '';
 
-    // Web Audio context — must be created INSIDE a user gesture handler
+    // AudioContext — created immediately, resumed on interaction if suspended
     let audioCtx = null;
-    let audioUnlocked = false;
-
-    // Queue of pending clicks to play after unlock
-    let pendingClicks = [];
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) {}
 
     function unlockAudio() {
-      if (audioUnlocked) return;
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      audioUnlocked = true;
-      // Drain any queued clicks
-      pendingClicks.forEach(fn => fn());
-      pendingClicks = [];
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
     }
-
-    // Unlock on FIRST real user interaction
-    ['click','keydown','touchstart','mousemove'].forEach(evt => {
-      document.addEventListener(evt, unlockAudio, { once: true });
-    });
 
     function getAudioCtx() {
       return audioCtx;
@@ -290,14 +282,9 @@
 
     function playKeyClick(ch) {
       if (ch === '\n' || ch === ' ') return;
-      // If not unlocked yet, queue it
-      if (!audioUnlocked) {
-        pendingClicks.push(() => playKeyClick(ch));
-        return;
-      }
       try {
         const ctx = getAudioCtx();
-        if (!ctx) return;
+        if (!ctx || ctx.state === 'suspended') return; // silently skip if audio blocked
         const buf = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
         const data = buf.getChannelData(0);
         // Mechanical click: sharp attack, fast decay, slight noise burst
@@ -370,13 +357,68 @@
     }
 
     // Start typing after a short delay
-    // Wait for Bebas Neue to be ready before typing starts
-    // This prevents the font-swap flash where early chars render in fallback font
+    // Create AudioContext immediately — attempt autoplay on load
+    // Browser may suspend it; we silently resume on first interaction
+    let typingStarted = false;
+
+    function tryStartTyping() {
+      if (typingStarted) return;
+      typingStarted = true;
+      const prompt = document.getElementById('startPrompt');
+      if (prompt) { prompt.style.opacity='0'; setTimeout(()=>{ if(prompt.parentNode) prompt.remove(); },400); }
+      setTimeout(typeChar, 300);
+    }
+
+    // Attempt to resume AudioContext silently — works immediately in some browsers
+    function tryResumeAudio() {
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(()=>{});
+      }
+    }
+
+    // Hero background audio — attempt autoplay immediately
+    const heroAudio = document.getElementById('heroAudio');
+    if (heroAudio) {
+      heroAudio.volume = 0;
+      heroAudio.play().then(() => {
+        // Autoplay allowed — fade in
+        let vol = 0;
+        const fadeIn = setInterval(() => {
+          vol = Math.min(0.154, vol + 0.004);
+          heroAudio.volume = vol;
+          if (vol >= 0.154) clearInterval(fadeIn);
+        }, 80);
+      }).catch(() => {
+        // Autoplay blocked — will retry on first interaction below
+      });
+    }
+
+    // On first interaction: resume audio ctx + retry hero audio if blocked
+    let interacted = false;
+    function onInteract() {
+      if (interacted) return;
+      interacted = true;
+      tryResumeAudio();
+      if (heroAudio && heroAudio.paused) {
+        heroAudio.play().then(() => {
+          let vol = heroAudio.volume;
+          const fadeIn = setInterval(() => {
+            vol = Math.min(0.154, vol + 0.004);
+            heroAudio.volume = vol;
+            if (vol >= 0.154) clearInterval(fadeIn);
+          }, 80);
+        }).catch(()=>{});
+      }
+    }
+    ['click','keydown','touchstart','mousemove','pointerdown'].forEach(evt => {
+      document.addEventListener(evt, onInteract, { once: true });
+    });
+
+    // Start typewriter as soon as font is ready — don't gate on audio
     document.fonts.load('1em "Bebas Neue"').then(() => {
-      setTimeout(typeChar, 400);
+      tryStartTyping();
     }).catch(() => {
-      // Fallback: if font API unavailable, wait a bit longer to be safe
-      setTimeout(typeChar, 900);
+      tryStartTyping();
     });
 
     /* CTA transition */
@@ -481,37 +523,7 @@
     }
     window.addEventListener('scroll',uc);uc();
 
-    /* HERO AUDIO */
-    const heroAudio = document.getElementById('heroAudio');
-    heroAudio.volume = 0;
-    let heroAudioPlaying = false;
-    let heroAudioMuted = false;
-
-    function fadeInAudio(targetVol, duration) {
-      const steps = 40;
-      const stepTime = duration / steps;
-      const volStep = targetVol / steps;
-      let step = 0;
-      const fade = setInterval(() => {
-        step++;
-        heroAudio.volume = Math.min(targetVol, step * volStep);
-        if (step >= steps) clearInterval(fade);
-      }, stepTime);
-    }
-
-    function startHeroAudio() {
-      if (heroAudioPlaying) return;
-      heroAudio.play().then(() => {
-        heroAudioPlaying = true;
-        fadeInAudio(0.154, 2500); // fade in over 2.5s to 14% volume
-      }).catch(() => {});
-    }
-
-    // Start on first any interaction
-    document.addEventListener('click', startHeroAudio, { once: true });
-    document.addEventListener('mousemove', startHeroAudio, { once: true });
-    // Also try immediately (works if user already interacted)
-    startHeroAudio();
+    // Hero audio handled in init block above
 
   </script>
 </body>
