@@ -624,44 +624,40 @@
 
     .hcta{position:relative;overflow:hidden;isolation:isolate;width:100%;align-self:stretch;justify-content:space-between;
       display:inline-flex;align-items:center;gap:10px;
-      background:#E1E0CC;color:#000;
+      background:linear-gradient(180deg,rgba(8,18,40,.96),rgba(3,10,25,.96));color:#8fb3ff;
       font-size:15px;letter-spacing:.12em;text-transform:uppercase;
       padding:13px 13px 13px 22px;border-radius:50px;text-decoration:none;
       font-weight:500;cursor:none;
       opacity:0;transform:none !important;
-      box-shadow:0 10px 28px rgba(0,0,0,.18);
-      transition:opacity .6s ease .15s,background-color .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease;
+      border:0.5px solid rgba(140,190,255,.35);
+      box-shadow:0 0 22px rgba(40,100,255,.35),0 0 80px rgba(0,80,255,.2),inset 0 0 10px rgba(113,161,255,.05);
+      transition:opacity .6s ease .15s,background-color .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease,border-color .18s ease;
     }
     .hcta.show{opacity:1;transform:none !important}
     .hcta::before{
       content:'';position:absolute;inset:0;z-index:0;
-      background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,0) 35%,rgba(140,190,255,.12) 50%,rgba(255,255,255,.08) 52%,rgba(140,190,255,0) 65%,transparent 100%);
+      background:linear-gradient(110deg,transparent 0%,rgba(120,160,255,0) 35%,rgba(120,160,255,.18) 50%,rgba(170,210,255,.10) 52%,rgba(120,160,255,0) 65%,transparent 100%);
       transform:translateX(-140%);
       transition:transform .45s ease;
     }
     .hcta::after{
       content:'';position:absolute;inset:1px;z-index:0;border-radius:49px;
-      background:linear-gradient(to bottom,rgba(255,255,255,.035),rgba(255,255,255,.01));
+      background:linear-gradient(to bottom,rgba(255,255,255,.025),rgba(255,255,255,.008));
       pointer-events:none;
     }
-    .hcta:hover{background:#e8e7d7;color:#000;box-shadow:0 6px 18px rgba(0,0,0,.22),0 0 18px rgba(140,190,255,.14),inset 0 0 12px rgba(140,190,255,.04);filter:none;transform:none !important}
+    .hcta:hover{background:linear-gradient(180deg,rgba(10,22,48,.98),rgba(4,12,28,.98));color:#d6e4ff;border-color:rgba(140,190,255,.7);box-shadow:0 0 35px rgba(70,140,255,.55),0 0 120px rgba(0,90,255,.30),inset 0 0 18px rgba(120,160,255,.12);filter:none;transform:none !important}
     .hcta:hover::before{transform:translateX(140%)}
     .hcta:active{transform:none !important}
     .hcta-text,.ccirc{position:relative;z-index:1}
-    .hcta-text{transition:text-shadow .16s ease,color .16s ease,letter-spacing .16s ease,opacity .12s ease;display:inline-block;min-width:180px;text-align:center;white-space:nowrap}
-    .hcta:hover .hcta-text{letter-spacing:.14em}
-    .hcta.initializing .hcta-text{color:#8ab4ff;letter-spacing:.14em}
+    .hcta-text{transition:text-shadow .16s ease,color .16s ease,letter-spacing .16s ease,opacity .12s ease;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28)}
+    .hcta:hover .hcta-text{letter-spacing:.14em;text-shadow:0 0 14px rgba(214,228,255,.42)}
+    .hcta.initializing .hcta-text{color:#b8d2ff;letter-spacing:.14em;text-shadow:0 0 18px rgba(184,210,255,.55)}
     .hcta.initializing .hcta-text::after{content:" |";opacity:.6;animation:blink 1s infinite}
     @keyframes blink{0%,100%{opacity:.6}50%{opacity:0}}
-    
-    
-    
-    
-    
 
-    .ccirc{width:40px;height:40px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;transition:background-color .16s ease,box-shadow .16s ease;flex-shrink:0}
-    .hcta:hover .ccirc{background:rgba(20,30,50,1);box-shadow:0 0 10px rgba(140,190,255,.18)}
-    .ccirc svg{width:15px;height:15px;stroke:#E1E0CC;fill:none;stroke-width:2}
+    .ccirc{width:40px;height:40px;border-radius:50%;background:rgba(2,8,22,.96);display:flex;align-items:center;justify-content:center;transition:background-color .16s ease,box-shadow .16s ease,border-color .16s ease;flex-shrink:0;border:0.5px solid rgba(140,190,255,.12);box-shadow:inset 0 0 6px rgba(255,255,255,.03),0 0 16px rgba(0,55,180,.12)}
+    .hcta:hover .ccirc{background:rgba(8,18,40,1);border-color:rgba(140,190,255,.22);box-shadow:0 0 16px rgba(140,190,255,.24)}
+    .ccirc svg{width:15px;height:15px;stroke:#8fb3ff;fill:none;stroke-width:2;filter:drop-shadow(0 0 8px rgba(143,179,255,.35))}
 
     .page-exit{
       position:fixed;inset:0;z-index:10000;pointer-events:none;
@@ -924,7 +920,7 @@
         <div class="hright">
           <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
           <a href="https://jy1920a.github.io/BeansOnCaffeine/main.html" class="hcta" id="heroCta" aria-label="Enter the Lab">
-            <span class="hcta-text" data-idle="Built to think clearly" data-hover="Enter the Lab" data-initializing="Initializing...">Built to think clearly</span>
+            <span class="hcta-text" data-idle="System ready" data-hover="Enter the Lab" data-initializing="Initializing...">System ready</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
         </div>
