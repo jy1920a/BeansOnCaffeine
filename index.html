@@ -755,10 +755,53 @@
       font-size: clamp(14px, 1.8vw, 22px);
       letter-spacing: 0.08em; text-transform: uppercase;
       color: rgba(225,224,204,0.45);
-      display: block; margin-top: 0;
+      display: block; margin-top: -0.15rem;
       -webkit-text-fill-color: rgba(225,224,204,0.45);
     }
 
+
+    /* GLITCH FLASH — fires once when typing completes */
+    @keyframes glitchFlash {
+      0%   { text-shadow: none; filter: none; }
+      10%  { text-shadow: -2px 0 rgba(255,80,80,0.7), 2px 0 rgba(80,200,255,0.7); filter: brightness(1.4); transform: translateX(-1px); }
+      20%  { text-shadow: 2px 0 rgba(255,80,80,0.5), -2px 0 rgba(80,200,255,0.5); filter: brightness(1.2); transform: translateX(2px); }
+      30%  { text-shadow: none; filter: none; transform: translateX(0); }
+      45%  { text-shadow: -1px 0 rgba(255,80,80,0.3), 1px 0 rgba(80,200,255,0.3); filter: brightness(1.1); }
+      60%  { text-shadow: none; filter: none; }
+      100% { text-shadow: none; filter: none; transform: translateX(0); }
+    }
+    .type-line-1.glitch-flash {
+      animation: glitchFlash 0.55s ease forwards;
+    }
+
+    /* SCANLINE — very subtle CRT texture on hero */
+    .hero-inner::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 3;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      border-radius: 20px;
+    }
+
+
+    @keyframes trailFade {
+      0%   { opacity: 1;   transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0;   transform: translate(-50%,-50%) scale(0.15); }
+    }
+    @keyframes ringExpand {
+      0%   { transform: scale(1);   opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes dotPulse2 {
+      0%,100% { transform: scale(1);    box-shadow: 0 0 10px rgba(140,190,255,0.6); }
+      50%      { transform: scale(1.25); box-shadow: 0 0 18px rgba(140,190,255,0.9); }
+    }
     @media(max-width:680px){
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
@@ -817,11 +860,14 @@
         </div>
       </div></div>
       <div id="startPrompt" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 0.5s ease;">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-          <div style="width:40px;height:40px;border-radius:50%;border:0.5px solid rgba(140,190,255,0.3);display:flex;align-items:center;justify-content:center;animation:sP 2s ease-in-out infinite;">
-            <div style="width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,0.7);"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+          <div style="position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;inset:0;border-radius:50%;border:0.5px solid rgba(140,190,255,0.15);animation:ringExpand 2s ease-out infinite;"></div>
+            <div style="position:absolute;inset:-8px;border-radius:50%;border:0.5px solid rgba(140,190,255,0.08);animation:ringExpand 2s ease-out infinite 0.5s;"></div>
+            <div style="position:absolute;inset:-16px;border-radius:50%;border:0.5px solid rgba(140,190,255,0.04);animation:ringExpand 2s ease-out infinite 1s;"></div>
+            <div style="width:7px;height:7px;border-radius:50%;background:rgba(140,190,255,0.85);box-shadow:0 0 10px rgba(140,190,255,0.6);animation:dotPulse2 1.8s ease-in-out infinite;"></div>
           </div>
-          <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(225,224,204,0.3);">click anywhere to begin</span>
+          <span style="font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(225,224,204,0.28);">click anywhere to begin</span>
         </div>
       </div>
     </div>
@@ -932,8 +978,13 @@
 
     function typeChar() {
       if (charIndex >= fullText.length) {
-        // Typing done — blink then fade cursor
+        // Typing done — trigger glitch flash then fade cursor
         typeCursor.classList.add('done');
+        const titleEl = document.querySelector('.type-line-1');
+        if (titleEl) {
+          titleEl.classList.add('glitch-flash');
+          setTimeout(() => titleEl.classList.remove('glitch-flash'), 600);
+        }
         // Play a slightly louder final click
         try {
           const ctx = getAudioCtx();
@@ -988,7 +1039,30 @@
     }
 
     // Start typing after a short delay
-    // cursor trail removed for performance
+    // ── CURSOR TRAIL ── throttled, amber accent
+    let lastTrail = 0;
+    const overlayForTrail = document.getElementById('landingOverlay');
+    if (overlayForTrail) {
+      overlayForTrail.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        if (now - lastTrail < 45) return;
+        lastTrail = now;
+        const dot = document.createElement('div');
+        dot.style.cssText = 'position:fixed;border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);';
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        const size = 3 + Math.random() * 3.5;
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        // 15% amber, 85% blue
+        const isAmber = Math.random() < 0.15;
+        dot.style.background = isAmber ? 'rgba(255,175,55,0.75)' : 'rgba(140,190,255,0.65)';
+        dot.style.boxShadow = isAmber ? '0 0 6px rgba(255,155,30,0.5)' : '0 0 5px rgba(140,190,255,0.4)';
+        dot.style.animation = 'trailFade 0.55s ease forwards';
+        document.body.appendChild(dot);
+        setTimeout(() => { if (dot.parentNode) dot.remove(); }, 580);
+      });
+    }
 
     // ── CLICK TO START ──
     // Everything waits for first click: font + audio + typewriter all fire together
