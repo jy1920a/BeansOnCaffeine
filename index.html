@@ -648,7 +648,10 @@
     .hcta:hover::before{transform:translateX(140%)}
     .hcta:active{transform:none !important}
     .hcta-text,.ccirc{position:relative;z-index:1}
-    .hcta-text{transition:text-shadow .16s ease}
+    .hcta-text{transition:text-shadow .16s ease,color .16s ease,letter-spacing .16s ease;display:inline-block;min-width:152px;text-align:left}
+    .hcta.initializing .hcta-text{color:#8ab4ff;letter-spacing:.14em}
+    .hcta.initializing .hcta-text::after{content:" |";opacity:.6;animation:blink 1s infinite}
+    @keyframes blink{0%,100%{opacity:.6}50%{opacity:0}}
     
     
     
@@ -666,7 +669,7 @@
     }
     .page-exit.active{opacity:1}
     .page-exit::after{
-      content:'Entering the Lab';
+      content:'Initializing System';
       position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
       font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
       color:rgba(225,224,204,.52);opacity:0;transition:opacity .25s ease .12s;
@@ -919,8 +922,8 @@
         </div>
         <div class="hright">
           <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
-          <a href="#" class="hcta" id="heroCta" aria-label="Enter the Lab">
-            <span class="hcta-text">Enter the Lab</span>
+          <a href="https://jy1920a.github.io/BeansOnCaffeine/main.html" class="hcta" id="heroCta" aria-label="Enter the Lab">
+            <span class="hcta-text" data-default="Enter the Lab">Enter the Lab</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
         </div>
@@ -1208,13 +1211,16 @@
     /* CTA transition */
     // heroCta already declared above
     const pageExit=document.getElementById('pageExit');
+    const heroCtaText = heroCta ? heroCta.querySelector('.hcta-text') : null;
     if(heroCta && pageExit){
       heroCta.addEventListener('click', (e)=>{
         const href=heroCta.getAttribute('href');
         if(!href) return;
         e.preventDefault();
+        heroCta.classList.add('initializing','active');
+        if(heroCtaText) heroCtaText.textContent='Initializing...';
         pageExit.classList.add('active');
-        setTimeout(()=>{ window.location.href = href; }, 360);
+        setTimeout(()=>{ window.location.href = href; }, 500);
       });
     }
 
