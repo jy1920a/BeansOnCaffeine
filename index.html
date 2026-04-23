@@ -568,17 +568,7 @@
     }
     .htitle-text{ display:block; }
     /* blinking line cursor */
-    .htitle-cursor {
-      display: inline-block;
-      width: 2px;
-      height: clamp(40px, 7vw, 78px);
-      background: rgba(140,190,255,0.85);
-      vertical-align: middle;
-      margin-left: 3px;
-      border-radius: 1px;
-      box-shadow: 0 0 8px rgba(140,190,255,0.6);
-      animation: blinkCursor .65s ease-in-out infinite;
-    }
+    .htitle-cursor { display: none; } /* replaced by CSS ::after on active line */
     @keyframes blinkCursor {
       0%,100% { opacity: 1; }
       50% { opacity: 0; }
@@ -766,6 +756,7 @@
       color: rgba(225,224,204,0.45);
       display: block;
       margin-top: 4px;
+      min-height: clamp(14px, 1.8vw, 22px); /* reserve space even when empty */
       -webkit-text-fill-color: rgba(225,224,204,0.45);
     }
 
@@ -812,6 +803,28 @@
       0%,100% { transform: scale(1);    box-shadow: 0 0 10px rgba(140,190,255,0.6); }
       50%      { transform: scale(1.25); box-shadow: 0 0 18px rgba(140,190,255,0.9); }
     }
+
+    /* Active line cursor — CSS only, no DOM movement */
+    .type-line-1.typing::after,
+    .type-line-2.typing::after {
+      content: '';
+      display: inline-block;
+      width: 2px;
+      background: rgba(140,190,255,0.85);
+      border-radius: 1px;
+      box-shadow: 0 0 8px rgba(140,190,255,0.6);
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: blinkCursor .65s ease-in-out infinite;
+    }
+    .type-line-1.typing::after {
+      height: clamp(40px, 7vw, 78px);
+    }
+    .type-line-2.typing::after {
+      height: clamp(10px, 1.2vw, 16px);
+      background: rgba(140,190,255,0.6);
+      box-shadow: 0 0 5px rgba(140,190,255,0.4);
+    }
     @media(max-width:680px){
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
@@ -853,7 +866,8 @@
       <div class="hcontent">
         <div>
           <h1 class="htitle">
-            <span class="htitle-text" id="typeTarget"></span><span class="htitle-cursor" id="typeCursor"></span>
+            <span class="type-line-1" id="typeLine1"></span><span class="htitle-cursor" id="typeCursor"></span>
+            <br><span class="type-line-2" id="typeLine2" style="opacity:0;transition:opacity 0s;"></span>
           </h1>
         </div>
         <div class="hright">
@@ -927,17 +941,27 @@
     // Track per-line content, render with different sizes
     let lineContents = ['', ''];
 
+    // Cache DOM refs for zero-reflow updates
+    const line1El = document.getElementById('typeLine1');
+    const line2El = document.getElementById('typeLine2');
+
     function renderLines() {
-      let out = '';
+      // Update textContent directly — no innerHTML, no reflow, no DOM moves
+      if (line1El) line1El.textContent = lineContents[0] || '';
       if (currentLine === 0) {
-        // Still on line 1 — cursor after line-1 text
-        out += '<span class="type-line-1">' + (lineContents[0] || '') + '</span>';
-      } else {
-        // On line 2 — cursor after line-2 text, line-1 complete
-        out += '<span class="type-line-1">' + lineContents[0] + '</span>';
-        out += '<br><span class="type-line-2">' + lineContents[1] + '</span>';
+        // Line 1 active — cursor on line 1
+        if (line1El) line1El.classList.add('typing');
+        if (line2El) line2El.classList.remove('typing');
       }
-      target.innerHTML = out;
+      if (currentLine >= 1 && line2El) {
+        if (line2El.style.opacity === '0') {
+          // First char of line 2 — reveal (already in layout, no shift)
+          line2El.style.opacity = '1';
+          if (line1El) line1El.classList.remove('typing');
+          line2El.classList.add('typing');
+        }
+        line2El.textContent = lineContents[1] || '';
+      }
     }
 
     // AudioContext — created immediately, resumed on interaction if suspended
@@ -983,7 +1007,9 @@
 
     function typeChar() {
       if (charIndex >= fullText.length) {
-        // Typing done — trigger glitch flash then fade cursor
+        // Typing done — remove typing cursors, trigger glitch
+        if (line1El) line1El.classList.remove('typing');
+        if (line2El) line2El.classList.remove('typing');
         typeCursor.classList.add('done');
         const titleEl = document.querySelector('.type-line-1');
         if (titleEl) {
@@ -1020,8 +1046,9 @@
 
       if (ch === '\n') {
         currentLine++;
+        // cursor stays in htitle, CSS handles visual position
         // Shrink cursor for line 2
-        typeCursor.style.height = '0.65em';
+        typeCursor.style.height = 'clamp(10px,1.2vw,16px)';
         typeCursor.style.background = 'rgba(140,190,255,0.6)';
         typeCursor.style.boxShadow = '0 0 5px rgba(140,190,255,0.4)';
       } else {
@@ -1112,7 +1139,8 @@
 
       // Wait for font then start typewriter
       document.fonts.load('1em "Bebas Neue"').then(() => {
-        setTimeout(typeChar, 150);
+        if (line1El) line1El.classList.add('typing');
+      setTimeout(typeChar, 150);
       }).catch(() => {
         setTimeout(typeChar, 500);
       });
