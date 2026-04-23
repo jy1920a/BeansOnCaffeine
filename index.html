@@ -514,6 +514,10 @@
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       opacity:.032;mix-blend-mode:overlay}
 
+    /* CURSOR TRAIL */
+    .trail-dot{position:fixed;width:5px;height:5px;border-radius:50%;background:rgba(140,190,255,0.7);pointer-events:none;z-index:9997;transform:translate(-50%,-50%);animation:trailFade 0.6s ease forwards}
+    @keyframes trailFade{0%{opacity:.7;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(0.2)}}
+
     /* CURSOR */
     .cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,.9);pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:screen}
     .cring{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border-radius:50%;border:.5px solid rgba(140,190,255,.3);pointer-events:none;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
@@ -668,6 +672,13 @@
     .reveal.visible{opacity:1;transform:translateY(0)}
     .rd1{transition-delay:.1s}
 
+    /* MARQUEE */
+    .marquee-wrap{width:100%;overflow:hidden;border-top:.5px solid rgba(255,255,255,.06);border-bottom:.5px solid rgba(255,255,255,.06);background:rgba(255,255,255,.015);padding:14px 0}
+    .marquee-track{display:flex;width:max-content;animation:marqueeScroll 22s linear infinite}
+    .marquee-track:hover{animation-play-state:paused}
+    .marquee-content{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(225,224,204,.22);white-space:nowrap;padding-right:0}
+    @keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
     @media(max-width:680px){
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
@@ -734,6 +745,14 @@
   </section>
 
   <!-- ABOUT -->
+  <!-- MARQUEE STRIP -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-content">Claude Projects&nbsp;&nbsp;·&nbsp;&nbsp;Caffeinated AI&nbsp;&nbsp;·&nbsp;&nbsp;Systems by logic&nbsp;&nbsp;·&nbsp;&nbsp;ERP &amp; Logistics&nbsp;&nbsp;·&nbsp;&nbsp;AI Workflows&nbsp;&nbsp;·&nbsp;&nbsp;Sanity by coffee&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      <span class="marquee-content">Claude Projects&nbsp;&nbsp;·&nbsp;&nbsp;Caffeinated AI&nbsp;&nbsp;·&nbsp;&nbsp;Systems by logic&nbsp;&nbsp;·&nbsp;&nbsp;ERP &amp; Logistics&nbsp;&nbsp;·&nbsp;&nbsp;AI Workflows&nbsp;&nbsp;·&nbsp;&nbsp;Sanity by coffee&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+    </div>
+  </div>
+
   <section class="about">
     <div class="acard reveal">
       <span class="aeyebrow">// Systems &amp; AI</span>
@@ -866,6 +885,25 @@
     }
 
     // Start typing after a short delay
+    // ── CURSOR TRAIL ──
+    let lastTrail = 0;
+    document.getElementById('landingOverlay').addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastTrail < 40) return; // throttle to ~25fps
+      lastTrail = now;
+      const dot = document.createElement('div');
+      dot.className = 'trail-dot';
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
+      // Slight size and hue variation
+      const size = 3 + Math.random() * 4;
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      dot.style.opacity = 0.4 + Math.random() * 0.4;
+      document.body.appendChild(dot);
+      setTimeout(() => { if (dot.parentNode) dot.remove(); }, 600);
+    });
+
     // ── CLICK TO START ──
     // Everything waits for first click: font + audio + typewriter all fire together
     const heroAudio = document.getElementById('heroAudio');
