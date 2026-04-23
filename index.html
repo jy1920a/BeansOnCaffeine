@@ -596,7 +596,7 @@
     }
 
     /* RIGHT side */
-    .hright{display:flex;flex-direction:column;align-items:flex-end;gap:1rem;max-width:270px;width:290px}
+    .hright{display:flex;flex-direction:column;align-items:flex-end;gap:1rem;width:290px}
     .hdesc{
       font-size:11px;color:rgba(225,224,204,.58);line-height:1.82;
       text-align:right;letter-spacing:.02em;
@@ -619,7 +619,18 @@
     .hcta.show{opacity:1;transform:translateY(0)}
     .hcta:hover{gap:16px;box-shadow:0 14px 36px rgba(0,0,0,.24),0 0 28px rgba(140,190,255,.15);transform:translateY(-2px)}
     .hcta{position:relative;overflow:hidden}
-    .hcta::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(140,190,255,.18),transparent);transform:translateX(-120%);transition:transform .65s ease}
+    .hcta::before{
+      content:'';position:absolute;top:0;left:-100%;
+      width:60%;height:100%;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
+      transform:skewX(-20deg);
+      animation:ctaShimmer 4s ease-in-out infinite;
+    }
+    @keyframes ctaShimmer{
+      0%,35%{left:-100%}
+      50%{left:160%}
+      100%{left:160%}
+    }
     .hcta:hover::before{transform:translateX(120%)}
     
     
@@ -847,7 +858,7 @@
         </div>
         <div class="hright">
           <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
-          <a href="./main.html" class="hcta" id="heroCta" aria-label="Enter the Lab">
+          <a href="#" class="hcta" id="heroCta" aria-label="Enter the Lab">
             Enter the Lab
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
@@ -1020,9 +1031,18 @@
       }
       charIndex++;
 
-      let delay = 55 + Math.random() * 35;
-      if (ch === '\n') delay = 160;
-      if (charIndex === 1) delay = 120;
+      // Speed ramp: slow start → fast middle → slow finish
+      const progress = charIndex / fullText.length;
+      let baseDelay;
+      if (progress < 0.12) {
+        baseDelay = 110 - progress * 200; // slow start
+      } else if (progress < 0.75) {
+        baseDelay = 42 + Math.random() * 22; // fast middle
+      } else {
+        baseDelay = 55 + (progress - 0.75) * 200; // slow finish
+      }
+      let delay = Math.max(30, baseDelay + (Math.random() - 0.5) * 18);
+      if (ch === '\n') delay = 180;
 
       setTimeout(typeChar, delay);
     }
@@ -1173,7 +1193,13 @@
         if(s.x<-s.size*2)s.x=W+s.size;if(s.x>W+s.size*2)s.x=-s.size;
         if(s.y<-s.size*2)s.y=H+s.size;if(s.y>H+s.size*2)s.y=-s.size;
         const dx=s.x-hmx,dy=s.y-hmy,dist=Math.sqrt(dx*dx+dy*dy);
-        const tb=dist<140?Math.pow(1-dist/140,1.6):0;
+        // Repulsion: shapes within 160px get pushed away
+        if(dist<160 && dist>0) {
+          const force = Math.pow(1-dist/160, 1.8) * 2.2;
+          s.x += (dx/dist)*force;
+          s.y += (dy/dist)*force;
+        }
+        const tb=dist<160?Math.pow(1-dist/160,1.6):0;
         s.boost+=(tb-s.boost)*.1;
         ds(s);
       });
