@@ -497,6 +497,7 @@
       opacity: 1;
       transition: opacity 0.6s ease;
       background: #000;
+      overflow-y: auto;
     }
     #landingOverlay.exit {
       opacity: 0;
@@ -721,8 +722,13 @@
       </div>
 
       <div class="shint" id="scrollHint"><span>scroll</span><div class="sline"></div></div>
-      <div id="startPrompt" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 0.4s ease;">
-        <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(225,224,204,0.25);animation:sP 2s ease-in-out infinite;">click anywhere to start</span>
+      <div id="startPrompt" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 0.5s ease;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:50%;border:0.5px solid rgba(140,190,255,0.3);display:flex;align-items:center;justify-content:center;animation:sP 2s ease-in-out infinite;">
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,0.7);"></div>
+          </div>
+          <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(225,224,204,0.3);">click anywhere to begin</span>
+        </div>
       </div>
     </div>
   </section>
@@ -860,69 +866,58 @@
     }
 
     // Start typing after a short delay
-    // Create AudioContext immediately — attempt autoplay on load
-    // Browser may suspend it; we silently resume on first interaction
-    let typingStarted = false;
-
-    function tryStartTyping() {
-      if (typingStarted) return;
-      typingStarted = true;
-      const prompt = document.getElementById('startPrompt');
-      if (prompt) { prompt.style.opacity='0'; setTimeout(()=>{ if(prompt.parentNode) prompt.remove(); },400); }
-      setTimeout(typeChar, 300);
-    }
-
-    // Attempt to resume AudioContext silently — works immediately in some browsers
-    function tryResumeAudio() {
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(()=>{});
-      }
-    }
-
-    // Hero background audio — attempt autoplay immediately
+    // ── CLICK TO START ──
+    // Everything waits for first click: font + audio + typewriter all fire together
     const heroAudio = document.getElementById('heroAudio');
-    if (heroAudio) {
-      heroAudio.volume = 0;
-      heroAudio.play().then(() => {
-        // Autoplay allowed — fade in
-        let vol = 0;
-        const fadeIn = setInterval(() => {
-          vol = Math.min(0.154, vol + 0.004);
-          heroAudio.volume = vol;
-          if (vol >= 0.154) clearInterval(fadeIn);
-        }, 80);
-      }).catch(() => {
-        // Autoplay blocked — will retry on first interaction below
-      });
-    }
+    if (heroAudio) heroAudio.volume = 0;
 
-    // On first interaction: resume audio ctx + retry hero audio if blocked
-    let interacted = false;
-    function onInteract() {
-      if (interacted) return;
-      interacted = true;
-      tryResumeAudio();
-      if (heroAudio && heroAudio.paused) {
+    let started = false;
+
+    function onFirstClick() {
+      if (started) return;
+      started = true;
+
+      // Hide the prompt
+      const prompt = document.getElementById('startPrompt');
+      if (prompt) {
+        prompt.style.opacity = '0';
+        setTimeout(() => { if (prompt.parentNode) prompt.remove(); }, 400);
+      }
+
+      // Create + resume AudioContext inside click handler (browser allows this)
+      if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        catch(e) {}
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+
+      // Start background audio with fade in
+      if (heroAudio) {
         heroAudio.play().then(() => {
-          let vol = heroAudio.volume;
+          let vol = 0;
           const fadeIn = setInterval(() => {
             vol = Math.min(0.154, vol + 0.004);
             heroAudio.volume = vol;
             if (vol >= 0.154) clearInterval(fadeIn);
-          }, 80);
+          }, 60);
         }).catch(()=>{});
       }
-    }
-    ['click','keydown','touchstart','mousemove','pointerdown'].forEach(evt => {
-      document.addEventListener(evt, onInteract, { once: true });
-    });
 
-    // Start typewriter as soon as font is ready — don't gate on audio
-    document.fonts.load('1em "Bebas Neue"').then(() => {
-      tryStartTyping();
-    }).catch(() => {
-      tryStartTyping();
-    });
+      // Wait for font then start typewriter
+      document.fonts.load('1em "Bebas Neue"').then(() => {
+        setTimeout(typeChar, 150);
+      }).catch(() => {
+        setTimeout(typeChar, 500);
+      });
+    }
+
+    // Trigger on any click anywhere on the overlay
+    const overlayEl = document.getElementById('landingOverlay');
+    if (overlayEl) {
+      overlayEl.addEventListener('click', onFirstClick, { once: true });
+      overlayEl.addEventListener('keydown', onFirstClick, { once: true });
+      overlayEl.addEventListener('touchstart', onFirstClick, { once: true });
+    }
 
     /* CTA transition */
     // heroCta already declared above
@@ -1043,7 +1038,7 @@
         setTimeout(() => {
           overlay.style.display = 'none';
           // Re-enable main page scroll
-          document.body.style.overflow = '';
+          // restore scroll
         }, 650);
       }
 
@@ -1051,7 +1046,7 @@
       if (pageExitEl) pageExitEl.addEventListener('click', exitLanding);
 
       // Lock main page scroll while overlay is visible
-      document.body.style.overflow = 'hidden';
+      // Overlay handles its own scroll — no need to lock body
     })();
   </script>
 
