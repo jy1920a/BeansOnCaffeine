@@ -90,9 +90,9 @@
     }
     @keyframes glowIntro {
       0%   { opacity: 0; filter: blur(20px); transform: translate(-50%,-50%) scale(0.5); }
-      100% { opacity: 0.5; filter: blur(0px); transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0.35; filter: blur(0px); transform: translate(-50%,-50%) scale(1); }
     }
-    @keyframes glowPulse { 0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); } }
+    @keyframes glowPulse { 0%,100% { opacity: 0.35; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 0.7; transform: translate(-50%,-50%) scale(1.06); } }
     .lp-title {
       transition: opacity 0.22s ease; position: relative; z-index: 1;
       display: block;
@@ -743,11 +743,17 @@
     .type-line-1 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(58px, 10vw, 110px);
-      line-height: 1; letter-spacing: -0.02em;
+      line-height: 1; letter-spacing: 0.02em;
       background: linear-gradient(145deg, #ffffff 0%, #ccd8ee 35%, #7a9fc8 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       display: block;
       margin-bottom: 0;
+      animation: titleBreath 6s ease-in-out infinite;
+      transform-origin: center center;
+      will-change: transform;
+    }
+    .type-line-1:hover {
+      text-shadow: 0 0 20px rgba(140,190,255,0.25);
     }
     .type-line-2 {
       font-family: 'DM Mono', monospace;
@@ -758,6 +764,20 @@
       margin-top: 4px;
       min-height: clamp(14px, 1.8vw, 22px); /* reserve space even when empty */
       -webkit-text-fill-color: rgba(225,224,204,0.58);
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    .type-line-2.tagline-sub {
+      animation: fadeSub 0.6s ease forwards;
+      animation-delay: 0s;
+    }
+    @keyframes fadeSub {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 0.6; transform: translateY(0); }
+    }
+    @keyframes titleBreath {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.015); }
     }
 
 
@@ -928,7 +948,7 @@
     });
 
     /* TYPEWRITER */
-    const lines = ['Caffeinated AI', 'Fueled by Caffeine and Bad Assumptions'];
+    const lines = ['Caffeinated AI', 'Runs on caffeine. Questions everything.'];
     const target = document.getElementById('typeTarget');
     const typeCursor = document.getElementById('typeCursor');
     const heroDesc = document.getElementById('heroDesc');
@@ -954,9 +974,9 @@
         if (line2El) line2El.classList.remove('typing');
       }
       if (currentLine >= 1 && line2El) {
-        if (line2El.style.opacity === '0') {
-          // First char of line 2 — reveal (already in layout, no shift)
-          line2El.style.opacity = '1';
+        if (!line2El.classList.contains('tagline-sub')) {
+          // First char of line 2 — reveal with delayed fade
+          line2El.classList.add('tagline-sub');
           if (line1El) line1El.classList.remove('typing');
           line2El.classList.add('typing');
         }
