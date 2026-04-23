@@ -263,17 +263,41 @@
     let charIndex = 0;
     let currentHtml = '';
 
-    // Web Audio context for typewriter clicks — no external file needed
+    // Web Audio context — must be created INSIDE a user gesture handler
     let audioCtx = null;
+    let audioUnlocked = false;
+
+    // Queue of pending clicks to play after unlock
+    let pendingClicks = [];
+
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioUnlocked = true;
+      // Drain any queued clicks
+      pendingClicks.forEach(fn => fn());
+      pendingClicks = [];
+    }
+
+    // Unlock on FIRST real user interaction
+    ['click','keydown','touchstart','mousemove'].forEach(evt => {
+      document.addEventListener(evt, unlockAudio, { once: true });
+    });
+
     function getAudioCtx() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
 
     function playKeyClick(ch) {
-      if (ch === '\n' || ch === ' ') return; // no click for space/newline
+      if (ch === '\n' || ch === ' ') return;
+      // If not unlocked yet, queue it
+      if (!audioUnlocked) {
+        pendingClicks.push(() => playKeyClick(ch));
+        return;
+      }
       try {
         const ctx = getAudioCtx();
+        if (!ctx) return;
         const buf = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
         const data = buf.getChannelData(0);
         // Mechanical click: sharp attack, fast decay, slight noise burst
@@ -303,6 +327,7 @@
         // Play a slightly louder final click
         try {
           const ctx = getAudioCtx();
+          if (ctx) {
           const buf = ctx.createBuffer(1, ctx.sampleRate * 0.06, ctx.sampleRate);
           const data = buf.getChannelData(0);
           for (let i = 0; i < data.length; i++) {
@@ -314,6 +339,7 @@
           const gain = ctx.createGain();
           gain.gain.value = 0.08;
           src.connect(gain); gain.connect(ctx.destination); src.start();
+          }
         } catch(e) {}
 
         setTimeout(() => {
@@ -344,14 +370,6 @@
     }
 
     // Start typing after a short delay
-    // Resume AudioContext on first interaction (browser policy)
-    document.addEventListener('click', () => {
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }, { once: true });
-    document.addEventListener('keydown', () => {
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }, { once: true });
-
     // Wait for Bebas Neue to be ready before typing starts
     // This prevents the font-swap flash where early chars render in fallback font
     document.fonts.load('1em "Bebas Neue"').then(() => {
