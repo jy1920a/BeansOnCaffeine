@@ -95,7 +95,7 @@
     @keyframes glowPulse { 0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); } }
     .lp-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(58px, 10vw, 110px);
+      font-size: clamp(48px, 8vw, 90px);
       letter-spacing: 0.03em; line-height: 0.92;
       background: linear-gradient(175deg, #ffffff 0%, #d0d8e8 40%, #8aa4c8 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -842,7 +842,7 @@
     });
 
     /* TYPEWRITER */
-    const lines = ['Caffeinated', 'AI','Systems. AI. Probably overthinking it.'];
+    const lines = ['Caffeinated AI','<span class="tagline-sub">Runs on caffeine and bad assumptions.</span>'];
     const target = document.getElementById('typeTarget');
     const typeCursor = document.getElementById('typeCursor');
     const heroDesc = document.getElementById('heroDesc');
