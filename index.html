@@ -588,7 +588,7 @@
     /* RIGHT side */
     .hright{display:flex;flex-direction:column;align-items:stretch;gap:1rem;width:290px}
     .hdesc{width:100%;text-align:right;
-      font-size:11px;color:rgba(225,224,204,.58);line-height:1.82;
+      font-size:12.5px;color:rgba(225,224,204,.58);line-height:1.75;
       letter-spacing:.02em;
       
       opacity:0;transform:translateY(14px);
@@ -599,15 +599,15 @@
     .hcta{width:100%;align-self:stretch;justify-content:space-between;
       display:inline-flex;align-items:center;gap:10px;
       background:#E1E0CC;color:#000;
-      font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-      padding:10px 10px 10px 20px;border-radius:50px;text-decoration:none;
+      font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+      padding:13px 13px 13px 22px;border-radius:50px;text-decoration:none;
       font-weight:500;cursor:none;
       opacity:0;transform:translateY(14px);
       box-shadow:0 10px 28px rgba(0,0,0,.18);
       transition:opacity .6s ease .15s,transform .6s ease .15s,gap .2s,box-shadow .25s ease;
     }
     .hcta.show{opacity:1;transform:translateY(0)}
-    .hcta:hover{gap:16px;box-shadow:0 14px 36px rgba(0,0,0,.24),0 0 28px rgba(140,190,255,.15);transform:translateY(-2px)}
+    .hcta:hover{gap:16px;box-shadow:0 14px 36px rgba(0,0,0,.24),0 0 28px rgba(140,190,255,.15);transform:translateY(-3px);filter:brightness(1.06)}
     .hcta{position:relative;overflow:hidden}
     .hcta::before{
       content:'';position:absolute;top:0;left:-100%;
@@ -628,9 +628,9 @@
     
     
 
-    .ccirc{width:34px;height:34px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+    .ccirc{width:40px;height:40px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;transition:transform .2s}
     .hcta:hover .ccirc{transform:scale(1.08);background:rgba(20,30,50,1)}
-    .ccirc svg{width:13px;height:13px;stroke:#E1E0CC;fill:none;stroke-width:2}
+    .ccirc svg{width:15px;height:15px;stroke:#E1E0CC;fill:none;stroke-width:2}
 
     .page-exit{
       position:fixed;inset:0;z-index:10000;pointer-events:none;
@@ -753,11 +753,11 @@
       font-family: 'DM Mono', monospace;
       font-size: clamp(14px, 1.8vw, 22px);
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: rgba(225,224,204,0.45);
+      color: rgba(225,224,204,0.58);
       display: block;
       margin-top: 4px;
       min-height: clamp(14px, 1.8vw, 22px); /* reserve space even when empty */
-      -webkit-text-fill-color: rgba(225,224,204,0.45);
+      -webkit-text-fill-color: rgba(225,224,204,0.58);
     }
 
 
