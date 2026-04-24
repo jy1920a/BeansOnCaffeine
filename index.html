@@ -539,8 +539,8 @@
       opacity:.032;mix-blend-mode:overlay}100%{opacity:0;transform:translate(-50%,-50%) scale(0.2)}}
 
     /* CURSOR */
-    .cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,.9);pointer-events:none;will-change:transform;mix-blend-mode:screen}
-    .cring{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border-radius:50%;border:.5px solid rgba(140,190,255,.3);pointer-events:none;will-change:transform;transition:width .12s,height .25s,border-color .25s}
+    .cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,.9);pointer-events:none;mix-blend-mode:screen}
+    .cring{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border-radius:50%;border:.5px solid rgba(140,190,255,.3);pointer-events:none;transition:width .12s,height .25s,border-color .25s}
 
     /* HERO */
     .hero{position:relative;width:100%;height:100vh;padding:1rem;display:flex;flex-direction:column}
@@ -606,7 +606,7 @@
     }
 
     /* RIGHT side */
-    .hright{contain:layout;margin-top:90px;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;width:290px}
+    .hright{contain:layout;margin-top:99px;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;width:290px}
     .hdesc{width:100%;text-align:right;
       font-size:11.5px;color:rgba(225,224,204,.58);line-height:1.75;
       letter-spacing:0;
@@ -621,11 +621,11 @@
       background:linear-gradient(180deg,rgba(8,18,40,.96),rgba(3,10,25,.96));color:#8fb3ff;
       font-size:15px;letter-spacing:.12em;text-transform:uppercase;
       padding:13px 13px 13px 22px;border-radius:0;text-decoration:none;
-      font-weight:500;cursor:none;will-change:transform;
+      font-weight:500;cursor:none;
       opacity:0;
       border:0.5px solid rgba(140,190,255,.35);
       box-shadow:0 0 22px rgba(40,100,255,.35),0 0 80px rgba(0,80,255,.2),inset 0 0 10px rgba(113,161,255,.05);animation:borderPulse 3s ease-in-out infinite;
-      transition:opacity .6s ease .15s,background .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease,border-color .18s ease;
+      transition:opacity .6s ease .15s,background .22s ease,color .18s ease,border-color .18s ease;
     }
     .hcta.show{opacity:1;transform:none !important}
     .hcta::before{
@@ -655,21 +655,22 @@
       width:60%;height:100%;
       background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
       transform:skewX(-20deg);
-      animation:ctaShimmer 4s ease-in-out infinite;
+      /* shimmer animation disabled */
     }
     /* ctaShimmer replaced by hcta::before sweep */
       50%{left:160%}
       100%{left:160%}
     }
-    .hcta:hover::before{transform:translateX(120%)}
+    .hcta:hover::before{transform:translateX(-140%)} /* shimmer frozen */
     
     
     
     
     
 
-    .ccirc{width:40px;height:40px;border-radius:50%;background:rgba(2,8,22,.96);display:flex;align-items:center;justify-content:center;transition:background .16s,box-shadow .16s,border-color .16s;flex-shrink:0;border:0.5px solid rgba(140,190,255,.12);box-shadow:inset 0 0 6px rgba(255,255,255,.03),0 0 16px rgba(0,55,180,.12)}
-    .hcta:hover .ccirc{transform:scale(1.08);background:rgba(20,30,50,1)}
+    .ccirc{width:40px;height:40px;border-radius:50%;background:rgba(2,8,22,.96);display:flex;align-items:center;justify-content:center;transition:background .16s,border-color .16s;flex-shrink:0;border:0.5px solid rgba(140,190,255,.12);contain:layout}
+    .hcta:hover .ccirc{background:rgba(20,30,50,1)}
+    .hcta:hover{background:linear-gradient(180deg,rgba(10,22,48,.98),rgba(4,12,28,.98));color:#d6e4ff;border-color:rgba(140,190,255,.65);transform:none !important;filter:none}
     .ccirc svg{width:15px;height:15px;stroke:#8fb3ff;fill:none;stroke-width:2;filter:drop-shadow(0 0 8px rgba(143,179,255,.35))}
 
     .page-exit{
