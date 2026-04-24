@@ -396,6 +396,9 @@
       if (el_total) el_total.textContent = String(liveCount + soonCount).padStart(2,'0');
       if (el_live)  el_live.textContent  = String(liveCount).padStart(2,'0');
       if (el_soon)  el_soon.textContent  = String(soonCount).padStart(2,'0');
+      // Also update the landing status line count
+      const sc = document.getElementById('heroStatusCount');
+      if (sc) sc.textContent = String(liveCount).padStart(2,'0') + ' Deck' + (liveCount!==1?'s':'') + ' Live';
     })();
 
     document.addEventListener('keydown', e => {
@@ -603,7 +606,7 @@
     }
 
     /* RIGHT side */
-    .hright{margin-top:90px;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;width:290px}
+    .hright{contain:layout;margin-top:90px;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;width:290px}
     .hdesc{width:100%;text-align:right;
       font-size:11.5px;color:rgba(225,224,204,.58);line-height:1.75;
       letter-spacing:0;
@@ -613,7 +616,7 @@
     }
     .hdesc.show{opacity:1;transform:translateY(0)}
 
-    .hcta{padding-top:46px;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;width:100%;align-self:stretch;justify-content:space-between;
+    .hcta{contain:layout style;padding-top:46px;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;width:100%;align-self:stretch;justify-content:space-between;
       display:inline-flex;align-items:center;gap:10px;
       background:linear-gradient(180deg,rgba(8,18,40,.96),rgba(3,10,25,.96));color:#8fb3ff;
       font-size:15px;letter-spacing:.12em;text-transform:uppercase;
@@ -638,10 +641,10 @@
     }
     /* hcta hover handled above */
     .hcta:hover .ccirc{background:rgba(8,18,40,1);border-color:rgba(140,190,255,.22);box-shadow:0 0 16px rgba(140,190,255,.24)}
-    .hcta:hover::before{transform:translateX(140%)}
+    /* shimmer sweep on hover removed to prevent page movement */
 
     .hcta-text,.ccirc{position:relative;z-index:1}
-    .hcta-text{transition:text-shadow .16s,color .16s,letter-spacing .16s;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28)}
+    .hcta-text{transition:text-shadow .16s,color .16s;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28);letter-spacing:.12em}
 
     .hcta.show{opacity:1;transform:translateY(0)}
     /* hcta hover handled above */
@@ -828,6 +831,28 @@
     .hcta-corner.bl, .hcta-corner.hcta-corner-bl { bottom:-1px;left:-1px;border-width:0 0 1px 1px; }
     .hcta-corner.br, .hcta-corner.hcta-corner-br { bottom:-1px;right:-1px;border-width:0 1px 1px 0; }
     .hcta:hover .hcta-corner { border-color:rgba(140,190,255,0.75); transition:border-color 0.2s; }
+
+    /* STATUS LINE — below button */
+    .hero-status {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(140,190,255,0.28);
+      margin-top: 10px;
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+      opacity: 0; transition: opacity 0.6s ease 0.3s;
+    }
+    .hero-status.show { opacity: 1; }
+    .hero-status-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(140,190,255,0.65);
+      display: inline-block; flex-shrink: 0;
+      animation: dotPulse2 1.8s ease-in-out infinite;
+    }
+    .hero-status-label { color: rgba(225,224,204,0.2); }
+    .hero-status-sep { color: rgba(140,190,255,0.15); }
+    .hero-status-count { color: rgba(140,190,255,0.28); }
     /* SCANLINE — very subtle CRT texture on hero */
     .hero-inner::after {
       content: '';
@@ -1012,6 +1037,12 @@
             <span class="hcta-text">Enter the Lab</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
+          <div class="hero-status" id="heroStatus">
+            <span class="hero-status-dot"></span>
+            <span class="hero-status-label">System Online</span>
+            <span class="hero-status-sep">&nbsp;·&nbsp;</span>
+            <span class="hero-status-count" id="heroStatusCount">02 Decks Live</span>
+          </div>
         </div>
       </div></div>
       <div id="startPrompt" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 0.5s ease;">
@@ -1165,6 +1196,8 @@
         setTimeout(() => {
           if (heroDesc) heroDesc.classList.add('show');
           if (heroCta) heroCta.classList.add('show');
+          const heroStatus = document.getElementById('heroStatus');
+          if (heroStatus) heroStatus.classList.add('show');
           // Fade in line 2 — no typewriter, just opacity
           if (line2El) {
             line2El.textContent = '// Runs on caffeine. Questions everything.';
