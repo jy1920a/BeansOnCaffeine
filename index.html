@@ -1598,19 +1598,23 @@
       const pageExitEl = document.querySelector('#landingOverlay #pageExit');
       const overlay = document.getElementById('landingOverlay');
 
-      function exitLanding() {
+      function exitLanding(e) {
+        if (e) e.preventDefault();
         // Stop audio
         const ha = document.getElementById('heroAudio');
         if (ha) { ha.pause(); }
-        // Flash page-exit overlay then navigate
+        // Show dark flash overlay instantly, navigate immediately after
         const pe = document.getElementById('pageExit');
-        if (pe) pe.classList.add('active');
-        setTimeout(() => {
-          window.location.href = 'https://jy1920a.github.io/BeansOnCaffeine/main.html';
-        }, 360);
+        if (pe) {
+          pe.style.transition = 'none';
+          pe.style.opacity = '1';
+          pe.style.pointerEvents = 'all';
+        }
+        // Navigate with zero delay — page-exit is already covering everything
+        window.location.href = 'https://jy1920a.github.io/BeansOnCaffeine/main.html';
       }
 
-      if (ctaEl) ctaEl.addEventListener('click', (e) => { e.preventDefault(); exitLanding(); });
+      if (ctaEl) ctaEl.addEventListener('click', exitLanding);
       if (pageExitEl) pageExitEl.addEventListener('click', exitLanding);
 
       // Lock main page scroll while overlay is visible
