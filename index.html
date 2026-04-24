@@ -552,6 +552,20 @@
     .hero-grad{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(4,6,13,.45) 0%,transparent 25%,transparent 55%,rgba(4,6,13,.92) 100%);pointer-events:none}
     .hero-grad-s{position:absolute;inset:0;z-index:2;background:linear-gradient(to right,rgba(4,6,13,.6) 0%,transparent 20%,transparent 80%,rgba(4,6,13,.6) 100%);pointer-events:none}
 
+
+    /* PARTICLE NETWORK CANVAS */
+    .particle-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+      z-index: 1;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* PARTICLE NETWORK — z-index 2, above video/mask, below content */
+    .hero-particle { position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:0.72; }
     /* HERO CONTENT */
     .hcontent{
       position:absolute;bottom:0;left:0;right:0;z-index:5;
@@ -586,7 +600,7 @@
     }
 
     /* RIGHT side */
-    .hright{overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:1rem;width:290px}
+    .hright{padding-top:44px;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;width:290px;padding-top:90px}
     .hdesc{width:100%;text-align:right;
       font-size:11.5px;color:rgba(225,224,204,.58);line-height:1.75;
       letter-spacing:0;
@@ -602,9 +616,9 @@
       font-size:15px;letter-spacing:.12em;text-transform:uppercase;
       padding:13px 13px 13px 22px;border-radius:0;text-decoration:none;
       font-weight:500;cursor:none;will-change:transform;
-      opacity:0;transform:none !important;
+      opacity:0;
       border:0.5px solid rgba(140,190,255,.35);
-      box-shadow:0 0 22px rgba(40,100,255,.35),0 0 80px rgba(0,80,255,.2),inset 0 0 10px rgba(113,161,255,.05);
+      box-shadow:0 0 22px rgba(40,100,255,.35),0 0 80px rgba(0,80,255,.2),inset 0 0 10px rgba(113,161,255,.05);animation:borderPulse 3s ease-in-out infinite;
       transition:opacity .6s ease .15s,background .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease,border-color .18s ease;
     }
     .hcta.show{opacity:1;transform:none !important}
@@ -625,7 +639,7 @@
 
     .hcta-text,.ccirc{position:relative;z-index:1}
     .hcta-text{transition:text-shadow .16s,color .16s,letter-spacing .16s;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28)}
-    .hcta:hover .hcta-text{letter-spacing:.14em;text-shadow:0 0 14px rgba(214,228,255,.42)}
+
     .hcta.show{opacity:1;transform:translateY(0)}
     /* hcta hover handled above */
     .hcta:hover .ccirc{background:rgba(8,18,40,1);border-color:rgba(140,190,255,.22);box-shadow:0 0 16px rgba(140,190,255,.24)}
@@ -803,6 +817,14 @@
       animation: glitchFlash 0.55s ease forwards;
     }
 
+
+    /* CORNER RETICLE — techy targeting marks on button */
+    .hcta-corner { position:absolute;width:8px;height:8px;pointer-events:none;z-index:3;border-color:rgba(140,190,255,0.45);border-style:solid; }
+    .hcta-corner.tl, .hcta-corner.hcta-corner-tl { top:-1px;left:-1px;border-width:1px 0 0 1px; }
+    .hcta-corner.tr, .hcta-corner.hcta-corner-tr { top:-1px;right:-1px;border-width:1px 1px 0 0; }
+    .hcta-corner.bl, .hcta-corner.hcta-corner-bl { bottom:-1px;left:-1px;border-width:0 0 1px 1px; }
+    .hcta-corner.br, .hcta-corner.hcta-corner-br { bottom:-1px;right:-1px;border-width:0 1px 1px 0; }
+    .hcta:hover .hcta-corner { border-color:rgba(140,190,255,0.75); transition:border-color 0.2s; }
     /* SCANLINE — very subtle CRT texture on hero */
     .hero-inner::after {
       content: '';
@@ -901,6 +923,20 @@
       line-height: 1;
     }
     .hero-clock-day { color: rgba(225,224,204,0.22); }
+
+    /* CORNER RETICLES — targeting frame on button */
+    .hcta-corner { position: absolute; width: 8px; height: 8px; border-color: rgba(140,190,255,0.4); border-style: solid; transition: border-color 0.2s ease; z-index: 2; }
+    .hcta-corner-tl { top: 4px; left: 4px; border-width: 1px 0 0 1px; }
+    .hcta-corner-tr { top: 4px; right: 4px; border-width: 1px 1px 0 0; }
+    .hcta-corner-bl { bottom: 4px; left: 4px; border-width: 0 0 1px 1px; }
+    .hcta-corner-br { bottom: 4px; right: 4px; border-width: 0 1px 1px 0; }
+    .hcta:hover .hcta-corner { border-color: rgba(140,190,255,0.85); }
+
+    /* PULSING BORDER at rest */
+    @keyframes borderPulse {
+      0%,100% { box-shadow: 0 0 22px rgba(40,100,255,.35), 0 0 80px rgba(0,80,255,.2), inset 0 0 10px rgba(113,161,255,.05); }
+      50%      { box-shadow: 0 0 32px rgba(40,100,255,.55), 0 0 100px rgba(0,80,255,.3), inset 0 0 14px rgba(113,161,255,.08); }
+    }
     @media(max-width:680px){
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
@@ -931,6 +967,7 @@
       </video>
       <div class="hero-video-mask"></div>
       <canvas class="hero-canvas" id="hc"></canvas>
+      <canvas class="particle-canvas" id="pc"></canvas>
       <div class="hero-grad"></div>
       <div class="hero-grad-s"></div>
 
@@ -948,6 +985,8 @@
         </div>
       </div>
 
+      <canvas class="hero-particle" id="heroParticle"></canvas>
+
       <div class="hero-tag">// Featured Presentation</div>
       
       
@@ -961,9 +1000,13 @@
           </h1>
         </div>
         <div class="hright">
-          <p class="hdesc" id="heroDesc">Overengineered slides for underestimated ideas.</p>
+          <!-- heroDesc removed -->
           <a href="#" class="hcta" id="heroCta" aria-label="Enter the Lab">
-            <span class="hcta-text" data-idle="System ready" data-hover="Enter the Lab" data-initializing="Initializing...">System ready</span>
+            <span class="hcta-corner hcta-corner-tl"></span>
+            <span class="hcta-corner hcta-corner-tr"></span>
+            <span class="hcta-corner hcta-corner-bl"></span>
+            <span class="hcta-corner hcta-corner-br"></span>
+            <span class="hcta-text">Enter the Lab</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
         </div>
@@ -1092,7 +1135,7 @@
         // Typing done — remove typing cursors, trigger glitch
         if (line1El) line1El.classList.remove('typing');
         if (line2El) line2El.classList.remove('typing');
-        typeCursor.classList.add('done');
+        if (typeCursor) typeCursor.classList.add('done');
         const titleEl = document.querySelector('.type-line-1');
         if (titleEl) {
           titleEl.classList.add('glitch-flash');
@@ -1117,8 +1160,8 @@
         } catch(e) {}
 
         setTimeout(() => {
-          heroDesc.classList.add('show');
-          heroCta.classList.add('show');
+          if (heroDesc) heroDesc.classList.add('show');
+          if (heroCta) heroCta.classList.add('show');
           // Fade in line 2 — no typewriter, just opacity
           if (line2El) {
             line2El.textContent = '// Runs on caffeine. Questions everything.';
@@ -1263,31 +1306,9 @@
       overlayEl.addEventListener('touchstart', onFirstClick, { once: true });
     }
 
-    /* CTA transition */
+    /* CTA — static text, no hover swap */
     const heroCtaText = heroCta ? heroCta.querySelector('.hcta-text') : null;
-    let heroCtaTyping = null;
-    let heroCtaLocked = false;
-
-    function typeHeroText(target) {
-      if (!heroCtaText || heroCtaLocked) return;
-      if (heroCtaTyping) clearInterval(heroCtaTyping);
-      heroCtaText.textContent = '';
-      let i = 0;
-      heroCtaTyping = setInterval(() => {
-        heroCtaText.textContent = target.slice(0, i + 1);
-        i++;
-        if (i >= target.length) { clearInterval(heroCtaTyping); heroCtaTyping = null; }
-      }, 18);
-    }
-
-    if (heroCta && heroCtaText) {
-      const idleText = heroCtaText.dataset.idle || 'System ready';
-      const hoverText = heroCtaText.dataset.hover || 'Enter the Lab';
-      const initText = heroCtaText.dataset.initializing || 'Initializing...';
-      heroCtaText.textContent = idleText;
-      heroCta.addEventListener('mouseenter', () => typeHeroText(hoverText));
-      heroCta.addEventListener('mouseleave', () => typeHeroText(idleText));
-    }
+    if (heroCtaText) heroCtaText.textContent = 'Enter the Lab';
     const pageExit=document.getElementById('pageExit');
     if(heroCta && pageExit){
       heroCta.addEventListener('click', (e)=>{
@@ -1370,11 +1391,103 @@
     }
     resize();window.addEventListener('resize',resize);loop();
 
+    /* ── PARTICLE NETWORK (Update 2) ── */
+    (function() {
+      const pc = document.getElementById('pc');
+      if (!pc) return;
+      const pctx = pc.getContext('2d');
+      let PW, PH;
+
+      function presizeParticle() {
+        PW = pc.width = pc.offsetWidth;
+        PH = pc.height = pc.offsetHeight;
+      }
+
+      const PCOUNT = 90;
+      let pts = [];
+
+      function mkPt() {
+        const isAmber = Math.random() < 0.12;
+        return {
+          x: Math.random() * PW,
+          y: Math.random() * PH,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          r: Math.random() * 1.6 + 0.4,
+          amber: isAmber
+        };
+      }
+
+      function initPts() {
+        pts = Array.from({length: PCOUNT}, mkPt);
+      }
+
+      let pmx = -9999, pmy = -9999;
+      const hi2 = document.getElementById('hi');
+      if (hi2) {
+        hi2.addEventListener('mousemove', e => {
+          const rc = pc.getBoundingClientRect();
+          pmx = e.clientX - rc.left;
+          pmy = e.clientY - rc.top;
+        }, {passive: true});
+        hi2.addEventListener('mouseleave', () => { pmx = -9999; pmy = -9999; });
+      }
+
+      function drawParticles() {
+        pctx.clearRect(0, 0, PW, PH);
+
+        // Draw connections
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i + 1; j < pts.length; j++) {
+            const dx = pts[i].x - pts[j].x;
+            const dy = pts[i].y - pts[j].y;
+            const d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 120) {
+              const a = (1 - d/120) * 0.22;
+              pctx.beginPath();
+              pctx.moveTo(pts[i].x, pts[i].y);
+              pctx.lineTo(pts[j].x, pts[j].y);
+              pctx.strokeStyle = `rgba(140,190,255,${a})`;
+              pctx.lineWidth = 0.5;
+              pctx.stroke();
+            }
+          }
+        }
+
+        // Draw dots + repulsion
+        pts.forEach(p => {
+          // Cursor repulsion
+          const dx = p.x - pmx, dy = p.y - pmy;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 100 && d > 0) {
+            p.x += (dx/d) * 1.2;
+            p.y += (dy/d) * 1.2;
+          }
+
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = PW; if (p.x > PW) p.x = 0;
+          if (p.y < 0) p.y = PH; if (p.y > PH) p.y = 0;
+
+          pctx.beginPath();
+          pctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          pctx.fillStyle = p.amber ? 'rgba(255,175,55,0.75)' : 'rgba(140,190,255,0.75)';
+          pctx.fill();
+        });
+
+        requestAnimationFrame(drawParticles);
+      }
+
+      presizeParticle();
+      initPts();
+      window.addEventListener('resize', () => { presizeParticle(); initPts(); });
+      drawParticles();
+    })();
+
     /* SCROLL REVEALS */
     // Use overlay as scroll root for IntersectionObserver
     const overlayRoot = document.getElementById('landingOverlay');
     const io = new IntersectionObserver(
-      els => els.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      els => els.forEach(e => { if (e.isIntersecting && e.target) e.target.classList.add('visible'); }),
       { threshold: 0.15, root: overlayRoot }
     );
     overlayRoot.querySelectorAll('.reveal').forEach(el => io.observe(el));
@@ -1386,6 +1499,71 @@
     // Hero audio handled in init block above
 
   
+
+
+    /* PARTICLE NETWORK — dots + connecting lines over video */
+    (function() {
+      const pc = document.getElementById('heroParticle');
+      if (!pc) return;
+      const ctx = pc.getContext('2d');
+      const hiEl = document.getElementById('hi');
+
+      function resizePC() {
+        pc.width = hiEl.offsetWidth;
+        pc.height = hiEl.offsetHeight;
+      }
+      resizePC();
+      window.addEventListener('resize', resizePC);
+
+      const pts = Array.from({length: 90}, () => ({
+        x: Math.random() * pc.width,
+        y: Math.random() * pc.height,
+        vx: (Math.random()-0.5)*0.32,
+        vy: (Math.random()-0.5)*0.32,
+        r: Math.random()*1.4+0.3,
+        amber: Math.random() < 0.12
+      }));
+
+      let pmx=-9999, pmy=-9999;
+      hiEl.addEventListener('mousemove', e => {
+        const r = pc.getBoundingClientRect();
+        pmx = e.clientX-r.left; pmy = e.clientY-r.top;
+      });
+      hiEl.addEventListener('mouseleave', () => { pmx=-9999; pmy=-9999; });
+
+      function pDraw() {
+        ctx.clearRect(0, 0, pc.width, pc.height);
+        // connections
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i+1; j < pts.length; j++) {
+            const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+            const d=Math.sqrt(dx*dx+dy*dy);
+            if (d < 120) {
+              ctx.beginPath();
+              ctx.moveTo(pts[i].x, pts[i].y);
+              ctx.lineTo(pts[j].x, pts[j].y);
+              ctx.strokeStyle = `rgba(140,190,255,${(1-d/120)*0.14})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        // dots
+        pts.forEach(p => {
+          const dx=p.x-pmx, dy=p.y-pmy, d=Math.sqrt(dx*dx+dy*dy);
+          if (d < 110 && d > 0) { p.x+=(dx/d)*0.85; p.y+=(dy/d)*0.85; }
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0)p.x=pc.width; if(p.x>pc.width)p.x=0;
+          if(p.y<0)p.y=pc.height; if(p.y>pc.height)p.y=0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          ctx.fillStyle = p.amber ? 'rgba(255,175,55,0.6)' : 'rgba(140,190,255,0.55)';
+          ctx.fill();
+        });
+        requestAnimationFrame(pDraw);
+      }
+      pDraw();
+    })();
 
       // Override CTA click — fade overlay out instead of navigating
       const ctaEl = document.querySelector('#landingOverlay .hcta') || document.querySelector('#landingOverlay [id="heroCta"]');
