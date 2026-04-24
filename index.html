@@ -1346,16 +1346,7 @@
     /* CTA — static text, no hover swap */
     const heroCtaText = heroCta ? heroCta.querySelector('.hcta-text') : null;
     if (heroCtaText) heroCtaText.textContent = 'Enter the Lab';
-    const pageExit=document.getElementById('pageExit');
-    if(heroCta && pageExit){
-      heroCta.addEventListener('click', (e)=>{
-        const href=heroCta.getAttribute('href');
-        if(!href) return;
-        e.preventDefault();
-        pageExit.classList.add('active');
-        setTimeout(()=>{ window.location.href = href; }, 360);
-      });
-    }
+    /* CTA navigation handled by exitLanding() in overlay IIFE */
 
     /* HERO VIDEO */
     const heroVideo=document.getElementById('heroVideo');
@@ -1608,15 +1599,15 @@
       const overlay = document.getElementById('landingOverlay');
 
       function exitLanding() {
-        overlay.classList.add('exit');
         // Stop audio
         const ha = document.getElementById('heroAudio');
         if (ha) { ha.pause(); }
+        // Flash page-exit overlay then navigate
+        const pe = document.getElementById('pageExit');
+        if (pe) pe.classList.add('active');
         setTimeout(() => {
-          overlay.style.display = 'none';
-          // Re-enable main page scroll
-          // restore scroll
-        }, 650);
+          window.location.href = 'https://jy1920a.github.io/BeansOnCaffeine/main.html';
+        }, 360);
       }
 
       if (ctaEl) ctaEl.addEventListener('click', (e) => { e.preventDefault(); exitLanding(); });
