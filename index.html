@@ -61,20 +61,12 @@
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeInOnly {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
     .lp-tag          { animation: fadeUp 0.5s ease forwards; animation-delay: 0s; opacity: 0; }
     .title-wrap      { animation: fadeUp 0.55s ease forwards; animation-delay: 0.35s; opacity: 0; }
     .lp-sub          { animation: fadeUp 0.45s ease forwards; animation-delay: 0.5s; opacity: 0; }
     .deck-desc       { animation: fadeUp 0.45s ease forwards; animation-delay: 0.6s; opacity: 0; }
     .deck-nav        { animation: fadeUp 0.45s ease forwards; animation-delay: 0.7s; opacity: 0; }
-.lp-cta {
-      animation: fadeInOnly 0.5s ease forwards;
-      animation-delay: 0.85s;
-      opacity: 0;
-    }
+    .lp-cta          { animation: fadeUp 0.5s ease forwards; animation-delay: 0.85s; opacity: 0; }
     .lp-bottom-split { animation: fadeUp 0.5s ease forwards; animation-delay: 1.0s; opacity: 0; }
     .lp-bottombar    { animation: fadeUp 0.5s ease forwards; animation-delay: 1.1s; opacity: 0; }
 
@@ -98,9 +90,9 @@
     }
     @keyframes glowIntro {
       0%   { opacity: 0; filter: blur(20px); transform: translate(-50%,-50%) scale(0.5); }
-      100% { opacity: 0.35; filter: blur(0px); transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0.5; filter: blur(0px); transform: translate(-50%,-50%) scale(1); }
     }
-    @keyframes glowPulse { 0%,100% { opacity: 0.35; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 0.7; transform: translate(-50%,-50%) scale(1.06); } }
+    @keyframes glowPulse { 0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); } }
     .lp-title {
       transition: opacity 0.22s ease; position: relative; z-index: 1;
       display: block;
@@ -132,49 +124,20 @@
 
     /* ── CTA ── */
     .lp-cta {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      background: rgba(255,255,255,0.04);
-      color: rgba(220,220,220,0.85);
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      padding: 18px 28px;
-      border-radius: 0;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; background: rgba(255,255,255,0.04); color: rgba(220,220,220,0.85);
+      font-family: 'DM Mono', monospace; font-size: 13px;
+      padding: 18px 28px; border-radius: 4px;
       border: 0.5px solid rgba(255,255,255,0.14);
-      text-decoration: none;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s, text-shadow 0.18s;
+      text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s, text-shadow 0.3s;
       margin-bottom: 1.4rem;
-      position: relative;
-      overflow: hidden;
-      transform: none !important;
     }
-
     .lp-cta:hover {
-      background: rgba(140,190,255,0.08);
-      color: #fff;
+      background: rgba(140,190,255,0.08); color: #fff;
       border-color: rgba(140,190,255,0.6);
-      box-shadow: 0 0 20px rgba(140,190,255,0.14), inset 0 0 14px rgba(140,190,255,0.05);
-      text-shadow: 0 0 10px rgba(140,190,255,0.45);
-      transform: none !important;
-    }
-
-    .lp-cta:active {
-      transform: none !important;
-    }
-
-    .lp-controls,
-    .ctrl-btn,
-    .drawer,
-    .drawer-input,
-    .drawer-save,
-    .drawer-delete,
-    .drawer-handle {
-      border-radius: 0;
+      box-shadow: 0 0 30px rgba(140,190,255,0.18), inset 0 0 20px rgba(140,190,255,0.06);
+      text-shadow: 0 0 16px rgba(140,190,255,0.6);
     }
 
     /* ── BOTTOM SPLIT ── */
@@ -573,8 +536,8 @@
       opacity:.032;mix-blend-mode:overlay}100%{opacity:0;transform:translate(-50%,-50%) scale(0.2)}}
 
     /* CURSOR */
-    .cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,.9);pointer-events:none;mix-blend-mode:screen}
-    .cring{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border-radius:50%;border:.5px solid rgba(140,190,255,.22);pointer-events:none;transition:border-color .16s ease, opacity .16s ease}
+    .cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;border-radius:50%;background:rgba(140,190,255,.9);pointer-events:none;will-change:transform;mix-blend-mode:screen}
+    .cring{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border-radius:50%;border:.5px solid rgba(140,190,255,.3);pointer-events:none;will-change:transform;transition:width .12s,height .25s,border-color .25s}
 
     /* HERO */
     .hero{position:relative;width:100%;height:100vh;padding:1rem;display:flex;flex-direction:column}
@@ -632,17 +595,17 @@
       transition:opacity .6s ease,transform .6s ease;
     }
     .hdesc.show{opacity:1;transform:translateY(0)}
-    .line-2 {display: block;margin-top: 10px;font-size: 0.95em;color: rgba(140,190,255,0.82);}    
+
     .hcta{position:relative;overflow:hidden;isolation:isolate;width:100%;align-self:stretch;justify-content:space-between;
       display:inline-flex;align-items:center;gap:10px;
       background:linear-gradient(180deg,rgba(8,18,40,.96),rgba(3,10,25,.96));color:#8fb3ff;
       font-size:15px;letter-spacing:.12em;text-transform:uppercase;
       padding:13px 13px 13px 22px;border-radius:0;text-decoration:none;
-      font-weight:500;cursor:none;
+      font-weight:500;cursor:none;will-change:transform;
       opacity:0;transform:none !important;
       border:0.5px solid rgba(140,190,255,.35);
       box-shadow:0 0 22px rgba(40,100,255,.35),0 0 80px rgba(0,80,255,.2),inset 0 0 10px rgba(113,161,255,.05);
-      transition:opacity .6s ease .15s,background-color .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease,border-color .18s ease;
+      transition:opacity .6s ease .15s,background .18s ease,box-shadow .18s ease,filter .18s ease,color .18s ease,border-color .18s ease;
     }
     .hcta.show{opacity:1;transform:none !important}
     .hcta::before{
@@ -656,18 +619,37 @@
       background:linear-gradient(to bottom,rgba(255,255,255,.025),rgba(255,255,255,.008));
       pointer-events:none;
     }
-    .hcta:hover{background:linear-gradient(180deg,rgba(10,22,48,.98),rgba(4,12,28,.98));color:#d6e4ff;border-color:rgba(140,190,255,.7);box-shadow:0 0 35px rgba(70,140,255,.55),0 0 120px rgba(0,90,255,.30),inset 0 0 18px rgba(120,160,255,.12);filter:none;transform:none !important}
-    .hcta:hover::before{transform:translateX(140%)}
-    .hcta:active{transform:none !important}
-    .hcta-text,.ccirc{position:relative;z-index:1}
-    .hcta-text{transition:text-shadow .16s ease,color .16s ease,letter-spacing .16s ease,opacity .12s ease;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28)}
-    .hcta:hover .hcta-text{letter-spacing:.14em;text-shadow:0 0 14px rgba(214,228,255,.42)}
-    .hcta.initializing .hcta-text{color:#b8d2ff;letter-spacing:.14em;text-shadow:0 0 18px rgba(184,210,255,.55)}
-    .hcta.initializing .hcta-text::after{content:" |";opacity:.6;animation:blink 1s infinite}
-    @keyframes blink{0%,100%{opacity:.6}50%{opacity:0}}
-
-    .ccirc{width:40px;height:40px;border-radius:50%;background:rgba(2,8,22,.96);display:flex;align-items:center;justify-content:center;transition:background-color .16s ease,box-shadow .16s ease,border-color .16s ease;flex-shrink:0;border:0.5px solid rgba(140,190,255,.12);box-shadow:inset 0 0 6px rgba(255,255,255,.03),0 0 16px rgba(0,55,180,.12)}
+    /* hcta hover handled above */
     .hcta:hover .ccirc{background:rgba(8,18,40,1);border-color:rgba(140,190,255,.22);box-shadow:0 0 16px rgba(140,190,255,.24)}
+    .hcta:hover::before{transform:translateX(140%)}
+
+    .hcta-text,.ccirc{position:relative;z-index:1}
+    .hcta-text{transition:text-shadow .16s,color .16s,letter-spacing .16s;display:inline-block;min-width:180px;text-align:center;white-space:nowrap;text-shadow:0 0 10px rgba(143,179,255,.28)}
+    .hcta:hover .hcta-text{letter-spacing:.14em;text-shadow:0 0 14px rgba(214,228,255,.42)}
+    .hcta.show{opacity:1;transform:translateY(0)}
+    /* hcta hover handled above */
+    .hcta:hover .ccirc{background:rgba(8,18,40,1);border-color:rgba(140,190,255,.22);box-shadow:0 0 16px rgba(140,190,255,.24)}
+    .hcta{position:relative;overflow:hidden}
+    .hcta::before{
+      content:'';position:absolute;top:0;left:-100%;
+      width:60%;height:100%;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
+      transform:skewX(-20deg);
+      animation:ctaShimmer 4s ease-in-out infinite;
+    }
+    /* ctaShimmer replaced by hcta::before sweep */
+      50%{left:160%}
+      100%{left:160%}
+    }
+    .hcta:hover::before{transform:translateX(120%)}
+    
+    
+    
+    
+    
+
+    .ccirc{width:40px;height:40px;border-radius:50%;background:rgba(2,8,22,.96);display:flex;align-items:center;justify-content:center;transition:background .16s,box-shadow .16s,border-color .16s;flex-shrink:0;border:0.5px solid rgba(140,190,255,.12);box-shadow:inset 0 0 6px rgba(255,255,255,.03),0 0 16px rgba(0,55,180,.12)}
+    .hcta:hover .ccirc{transform:scale(1.08);background:rgba(20,30,50,1)}
     .ccirc svg{width:15px;height:15px;stroke:#8fb3ff;fill:none;stroke-width:2;filter:drop-shadow(0 0 8px rgba(143,179,255,.35))}
 
     .page-exit{
@@ -677,7 +659,7 @@
     }
     .page-exit.active{opacity:1}
     .page-exit::after{
-      content:'Initializing System';
+      content:'Entering the Lab';
       position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
       font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
       color:rgba(225,224,204,.52);opacity:0;transition:opacity .25s ease .12s;
@@ -781,7 +763,7 @@
     .type-line-1 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(58px, 10vw, 110px);
-      line-height: 1; letter-spacing: 0.02em;
+      line-height: 1; letter-spacing: -0.02em;
       background: linear-gradient(145deg, #ffffff 0%, #ccd8ee 35%, #7a9fc8 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       display: block;
@@ -789,9 +771,6 @@
       animation: titleBreath 6s ease-in-out infinite;
       transform-origin: center center;
       will-change: transform;
-    }
-    .type-line-1:hover {
-      text-shadow: 0 0 20px rgba(140,190,255,0.25);
     }
     .type-line-2 {
       font-family: 'DM Mono', monospace;
@@ -802,23 +781,13 @@
       margin-top: 4px;
       min-height: clamp(14px, 1.8vw, 22px); /* reserve space even when empty */
       -webkit-text-fill-color: rgba(225,224,204,0.58);
-      opacity: 0;
-      transform: translateY(6px);
     }
-    .type-line-2.tagline-sub {
-      animation: fadeSub 0.6s ease forwards;
-      animation-delay: 0s;
-    }
-    @keyframes fadeSub {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 0.6; transform: translateY(0); }
-    }
+
+
     @keyframes titleBreath {
       0%,100% { transform: scale(1); }
       50% { transform: scale(1.015); }
     }
-
-
     /* GLITCH FLASH — fires once when typing completes */
     @keyframes glitchFlash {
       0%   { text-shadow: none; filter: none; }
@@ -929,8 +898,8 @@
           </h1>
         </div>
         <div class="hright">
-            <p class="hdesc" id="heroDesc"> AI presentations. Overengineered.<span class="line-2">Powered by exploration.</span></p>          
-            <a href="https://jy1920a.github.io/BeansOnCaffeine/main.html" class="hcta" id="heroCta" aria-label="Enter the Lab">
+          <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
+          <a href="#" class="hcta" id="heroCta" aria-label="Enter the Lab">
             <span class="hcta-text" data-idle="System ready" data-hover="Enter the Lab" data-initializing="Initializing...">System ready</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </a>
@@ -981,16 +950,12 @@
       cring.style.transform=`translate(calc(${mx}px - 50%), calc(${my}px - 50%))`;
     },{passive:true});
     document.querySelectorAll('a').forEach(a=>{
-      a.addEventListener('mouseenter',()=>{
-        cring.style.borderColor='rgba(140,190,255,.35)';
-      });
-      a.addEventListener('mouseleave',()=>{
-        cring.style.borderColor='rgba(140,190,255,.18)';
-      });
+      a.addEventListener('mouseenter',()=>{cur.style.width='5px';cur.style.height='5px';cring.style.width='50px';cring.style.height='50px';cring.style.borderColor='rgba(140,190,255,.55)';});
+      a.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';cring.style.width='34px';cring.style.height='34px';cring.style.borderColor='rgba(140,190,255,.3)';});
     });
 
     /* TYPEWRITER */
-    const lines = ['Caffeinated AI', 'Runs on caffeine. Questions everything.'];
+    const lines = ['Caffeinated AI', 'Fueled by Caffeine and Bad Assumptions'];
     const target = document.getElementById('typeTarget');
     const typeCursor = document.getElementById('typeCursor');
     const heroDesc = document.getElementById('heroDesc');
@@ -1016,9 +981,9 @@
         if (line2El) line2El.classList.remove('typing');
       }
       if (currentLine >= 1 && line2El) {
-        if (!line2El.classList.contains('tagline-sub')) {
-          // First char of line 2 — reveal with delayed fade
-          line2El.classList.add('tagline-sub');
+        if (line2El.style.opacity === '0') {
+          // First char of line 2 — reveal (already in layout, no shift)
+          line2El.style.opacity = '1';
           if (line1El) line1El.classList.remove('typing');
           line2El.classList.add('typing');
         }
@@ -1217,51 +1182,39 @@
     }
 
     /* CTA transition */
-    // heroCta already declared above
-    const pageExit=document.getElementById('pageExit');
     const heroCtaText = heroCta ? heroCta.querySelector('.hcta-text') : null;
     let heroCtaTyping = null;
     let heroCtaLocked = false;
 
-    function typeHeroText(target){
-      if(!heroCtaText || heroCtaLocked) return;
-      const current = heroCtaText.textContent || '';
-      if(current === target) return;
-      if(heroCtaTyping) clearInterval(heroCtaTyping);
+    function typeHeroText(target) {
+      if (!heroCtaText || heroCtaLocked) return;
+      if (heroCtaTyping) clearInterval(heroCtaTyping);
       heroCtaText.textContent = '';
       let i = 0;
-      heroCtaTyping = setInterval(()=>{
+      heroCtaTyping = setInterval(() => {
         heroCtaText.textContent = target.slice(0, i + 1);
-        i += 1;
-        if(i >= target.length){
-          clearInterval(heroCtaTyping);
-          heroCtaTyping = null;
-        }
+        i++;
+        if (i >= target.length) { clearInterval(heroCtaTyping); heroCtaTyping = null; }
       }, 18);
     }
 
-    if(heroCta && heroCtaText){
-      const idleText = heroCtaText.dataset.idle || 'Built to think clearly';
+    if (heroCta && heroCtaText) {
+      const idleText = heroCtaText.dataset.idle || 'System ready';
       const hoverText = heroCtaText.dataset.hover || 'Enter the Lab';
       const initText = heroCtaText.dataset.initializing || 'Initializing...';
       heroCtaText.textContent = idleText;
-
-      heroCta.addEventListener('mouseenter', ()=> typeHeroText(hoverText));
-      heroCta.addEventListener('mouseleave', ()=> typeHeroText(idleText));
-
-      if(pageExit){
-        heroCta.addEventListener('click', (e)=>{
-          const href=heroCta.getAttribute('href');
-          if(!href) return;
-          e.preventDefault();
-          heroCtaLocked = true;
-          if(heroCtaTyping) clearInterval(heroCtaTyping);
-          heroCtaText.textContent = initText;
-          heroCta.classList.add('initializing','active');
-          pageExit.classList.add('active');
-          setTimeout(()=>{ window.location.href = href; }, 500);
-        });
-      }
+      heroCta.addEventListener('mouseenter', () => typeHeroText(hoverText));
+      heroCta.addEventListener('mouseleave', () => typeHeroText(idleText));
+    }
+    const pageExit=document.getElementById('pageExit');
+    if(heroCta && pageExit){
+      heroCta.addEventListener('click', (e)=>{
+        const href=heroCta.getAttribute('href');
+        if(!href) return;
+        e.preventDefault();
+        pageExit.classList.add('active');
+        setTimeout(()=>{ window.location.href = href; }, 360);
+      });
     }
 
     /* HERO VIDEO */
