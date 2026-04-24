@@ -776,11 +776,12 @@
       font-family: 'DM Mono', monospace;
       font-size: clamp(14px, 1.8vw, 22px);
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: rgba(225,224,204,0.58);
+      color: rgba(255,175,55,0.62);
       display: block;
       margin-top: 4px;
-      min-height: clamp(14px, 1.8vw, 22px); /* reserve space even when empty */
-      -webkit-text-fill-color: rgba(225,224,204,0.58);
+      min-height: clamp(14px, 1.8vw, 22px);
+      -webkit-text-fill-color: rgba(255,175,55,0.62);
+      letter-spacing: 0.1em;
     }
 
 
@@ -852,6 +853,54 @@
       background: rgba(140,190,255,0.6);
       box-shadow: 0 0 5px rgba(140,190,255,0.4);
     }
+
+    /* ── HERO IDENTITY BLOCK — top left ── */
+    .hero-identity {
+      position: absolute;
+      top: 2.4rem; left: 2.4rem;
+      bottom: 14.5rem; /* clears the title area */
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      width: 320px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.3s;
+    }
+    /* A — Brand mark */
+    .hero-brand {
+      margin-bottom: 14px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      color: rgba(225,224,204,0.32);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    /* F — Byline */
+    .hero-byline { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+    .hero-byline-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(225,224,204,0.28); line-height: 1;
+    }
+    .hero-byline-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 9.5px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(140,190,255,0.35); line-height: 1;
+    }
+    .hero-ident-sep { display: none; } /* not needed with space-between */
+    /* E — Live clock */
+    .hero-clock {
+      font-family: 'DM Mono', monospace;
+      font-size: 10.5px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(140,190,255,0.28);
+      line-height: 1;
+    }
+    .hero-clock-day { color: rgba(225,224,204,0.22); }
     @media(max-width:680px){
       .hcontent{grid-template-columns:1fr;padding:1.5rem}
       .hright{max-width:100%;align-items:flex-start}
@@ -885,6 +934,20 @@
       <div class="hero-grad"></div>
       <div class="hero-grad-s"></div>
 
+      <!-- IDENTITY BLOCK: A + F + E -->
+      <div class="hero-identity">
+        <div class="hero-brand">Beans on Caffeine</div>
+        <div class="hero-ident-sep"></div>
+        <div class="hero-byline">
+          <span class="hero-byline-name">Jamie Yeo</span>
+          <span class="hero-byline-role">Systems Analyst &middot; Logistics &amp; ERP</span>
+        </div>
+        <div class="hero-ident-sep"></div>
+        <div class="hero-clock">
+          <span class="hero-clock-day" id="heroCockDay"></span><span id="heroClockTime"></span>
+        </div>
+      </div>
+
       <div class="hero-tag">// Featured Presentation</div>
       
       
@@ -894,11 +957,11 @@
         <div>
           <h1 class="htitle">
             <span class="type-line-1" id="typeLine1"></span><span class="htitle-cursor" id="typeCursor"></span>
-            <br><span class="type-line-2" id="typeLine2" style="opacity:0;transition:opacity 0s;"></span>
+            <br><span class="type-line-2" id="typeLine2" style="opacity:0;"></span>
           </h1>
         </div>
         <div class="hright">
-          <p class="hdesc" id="heroDesc">AI presentations crafted at the intersection of systems thinking and caffeinated curiosity. Built for clarity. Powered by exploration.</p>
+          <p class="hdesc" id="heroDesc">Overengineered slides for underestimated ideas.</p>
           <a href="#" class="hcta" id="heroCta" aria-label="Enter the Lab">
             <span class="hcta-text" data-idle="System ready" data-hover="Enter the Lab" data-initializing="Initializing...">System ready</span>
             <span class="ccirc"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg></span>
@@ -980,15 +1043,7 @@
         if (line1El) line1El.classList.add('typing');
         if (line2El) line2El.classList.remove('typing');
       }
-      if (currentLine >= 1 && line2El) {
-        if (line2El.style.opacity === '0') {
-          // First char of line 2 — reveal (already in layout, no shift)
-          line2El.style.opacity = '1';
-          if (line1El) line1El.classList.remove('typing');
-          line2El.classList.add('typing');
-        }
-        line2El.textContent = lineContents[1] || '';
-      }
+      // line 2 is static — fades in after typing completes, not typed
     }
 
     // AudioContext — created immediately, resumed on interaction if suspended
@@ -1064,6 +1119,12 @@
         setTimeout(() => {
           heroDesc.classList.add('show');
           heroCta.classList.add('show');
+          // Fade in line 2 — no typewriter, just opacity
+          if (line2El) {
+            line2El.textContent = '// Runs on caffeine. Questions everything.';
+            line2El.style.transition = 'opacity 0.5s ease';
+            line2El.style.opacity = '1';
+          }
         }, 400);
         return;
       }
@@ -1102,6 +1163,27 @@
     }
 
     // Start typing after a short delay
+    // ── LIVE CLOCK (E) ──
+    (function() {
+      const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+      function updateClock() {
+        const now = new Date();
+        const dayEl = document.getElementById('heroCockDay');
+        const timeEl = document.getElementById('heroClockTime');
+        if (!dayEl || !timeEl) return;
+        const day = DAYS[now.getDay()];
+        const d = String(now.getDate()).padStart(2,'0');
+        const mo = String(now.getMonth()+1).padStart(2,'0');
+        const h = String(now.getHours()).padStart(2,'0');
+        const m = String(now.getMinutes()).padStart(2,'0');
+        const sec = String(now.getSeconds()).padStart(2,'0');
+        dayEl.textContent = day + ' ' + d + '/' + mo + ' — ';
+        timeEl.textContent = h + ':' + m + ':' + sec;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    })();
+
     // ── CURSOR TRAIL ── throttled, amber accent
     let lastTrail = 0;
     const overlayForTrail = document.getElementById('landingOverlay');
