@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started with Claude Cowork</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/deck@latest/dist/deck.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0c0b0a;
+      --bg-alt:    #141210;
+      --bg-panel:  #1a1714;
+      --text:      #f2ece4;
+      --muted:     rgba(242,236,228,0.48);
+      --amber:     #e9a84c;
+      --amber-dim: rgba(233,168,76,0.15);
+      --teal:      #4eb8ad;
+      --teal-dim:  rgba(78,184,173,0.12);
+      --rule:      rgba(242,236,228,0.10);
+
+      --font-serif: 'DM Serif Display', Georgia, serif;
+      --font-sans:  'DM Sans', system-ui, sans-serif;
+
+      --t-display:  96px;
+      --t-title:    72px;
+      --t-h2:       52px;
+      --t-h3:       40px;
+      --t-body:     34px;
+      --t-small:    28px;
+      --t-label:    24px;
+
+      --px: 120px;
+      --pt: 100px;
+      --pb: 80px;
+      --gap-title: 52px;
+      --gap-item:  28px;
+    }
+
+    body { background: #000; font-family: var(--font-sans); }
+
+    section {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      padding: var(--pt) var(--px) var(--pb);
+      font-family: var(--font-sans);
+    }
+
+    .eyebrow {
+      font-size: var(--t-label);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 28px;
+    }
+    .slide-title {
+      font-family: var(--font-serif);
+      font-size: var(--t-title);
+      line-height: 1.1;
+      color: var(--text);
+      font-weight: 400;
+    }
+    .rule {
+      width: 60px;
+      height: 2px;
+      background: var(--amber);
+      margin-bottom: var(--gap-title);
+      flex-shrink: 0;
+    }
+
+    /* ══ SLIDE 1 — TITLE ══════════════════════════════════ */
+    #s1 {
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #s1::before {
+      content: '';
+      position: absolute;
+      right: -100px; top: -100px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,168,76,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #s1::after {
+      content: '';
+      position: absolute;
+      left: -60px; bottom: -60px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78,184,173,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #s1 .kicker {
+      font-size: var(--t-label);
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 36px;
+    }
+    #s1 h1 {
+      font-family: var(--font-serif);
+      font-size: 100px;
+      line-height: 1.05;
+      font-weight: 400;
+      max-width: 1000px;
+    }
+    #s1 h1 em { font-style: italic; color: var(--amber); }
+    #s1 .tagline {
+      margin-top: 40px;
+      font-size: var(--t-body);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.5;
+    }
+    #s1 .badge-row { margin-top: 52px; display: flex; gap: 16px; flex-wrap: wrap; }
+    #s1 .badge {
+      padding: 8px 24px;
+      border: 1px solid var(--rule);
+      font-size: var(--t-label);
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    #s1 .badge.hi {
+      border-color: rgba(233,168,76,0.35);
+      color: var(--amber);
+      background: var(--amber-dim);
+    }
+    #s1 .divider-line {
+      width: 2px; height: 72px;
+      background: var(--rule);
+      position: absolute;
+      bottom: var(--pb); left: var(--px);
+    }
+
+    /* ══ SLIDE 2 — THREE-PILLAR OVERVIEW ══════════════════ */
+    #s2 { justify-content: center; gap: 0; }
+    #s2 .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      margin-top: var(--gap-title);
+      flex: 1;
+      align-items: center;
+    }
+    #s2 .col { padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; }
+    #s2 .col-a {
+      background: var(--amber-dim);
+      border: 1px solid rgba(233,168,76,0.2);
+      border-right: none;
+    }
+    #s2 .col-b {
+      background: rgba(233,168,76,0.06);
+      border: 1px solid rgba(233,168,76,0.15);
+      border-right: none;
+    }
+    #s2 .col-c {
+      background: var(--teal-dim);
+      border: 1px solid rgba(78,184,173,0.2);
+    }
+    #s2 .col-label {
+      font-size: var(--t-label);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    #s2 .col-a .col-label,
+    #s2 .col-b .col-label { color: var(--amber); }
+    #s2 .col-c .col-label { color: var(--teal); }
+    #s2 .col-headline {
+      font-family: var(--font-serif);
+      font-size: var(--t-h2);
+      line-height: 1.2;
+      font-weight: 400;
+    }
+    #s2 .col-desc {
+      font-size: var(--t-small);
+      color: var(--muted);
+      margin-top: 20px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ══ SLIDE 3 — WHAT IS COWORK (definition + traits) ═══ */
+    #s3 { background: var(--bg); }
+    #s3 .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: var(--gap-title);
+      flex: 1;
+      align-content: start;
+    }
+    #s3 .big-def {
+      font-family: var(--font-serif);
+      font-size: var(--t-h2);
+      line-height: 1.3;
+      font-weight: 400;
+    }
+    #s3 .big-def em { font-style: italic; color: var(--amber); }
+    .traits { display: flex; flex-direction: column; gap: 32px; align-self: start; }
+    .trait {
+      display: flex; flex-direction: column; gap: 8px;
+      padding-left: 24px;
+      border-left: 2px solid var(--rule);
+      cursor: pointer;
+      transition: border-color 200ms, background 200ms, padding 200ms;
+    }
+    .trait:hover { background: rgba(242,236,228,0.03); }
+    .trait.amber { border-left-color: var(--amber); }
+    .trait.teal  { border-left-color: var(--teal); }
+    .trait.expanded { background: rgba(242,236,228,0.05); padding: 14px 14px 14px 22px; }
+    .trait.amber.expanded { background: rgba(233,168,76,0.07); }
+    .trait.teal.expanded  { background: rgba(78,184,173,0.07); }
+    .trait-title { font-size: var(--t-small); font-weight: 600; color: var(--text); }
+    .trait-title::after { content: ' ↓'; font-size: 0.75em; opacity: 0.4; display: inline-block; }
+    .trait.expanded .trait-title::after { content: ' ↑'; opacity: 0.7; }
+    .trait-desc {
+      font-size: var(--t-small); font-weight: 300; color: var(--muted); line-height: 1.5;
+      overflow: hidden; max-height: 0; opacity: 0; margin-top: 0;
+      transition: max-height 300ms ease, opacity 300ms ease, margin-top 300ms ease;
+    }
+    .trait.expanded .trait-desc { max-height: 140px; opacity: 1; margin-top: 8px; }
+
+    /* ══ SLIDE 4 — HOW IT WORKS ═══════════════════════════ */
+    #s4 { background: var(--bg-alt); }
+    #s4 .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      margin-top: var(--gap-title);
+      flex: 1;
+      align-content: start;
+    }
+    .step-card {
+      padding: 48px 40px;
+      border: 1px solid var(--rule);
+      border-right: none;
+      display: flex; flex-direction: column; gap: 20px;
+      cursor: pointer;
+      transition: background 200ms;
+      position: relative;
+    }
+    .step-card:last-child { border-right: 1px solid var(--rule); }
+    .step-card:hover { background: rgba(242,236,228,0.03); }
+    .step-card.active { background: var(--amber-dim); border-color: rgba(233,168,76,0.25); }
+    .step-num { font-size: var(--t-label); font-weight: 700; color: var(--amber); opacity: 0.5; }
+    .step-card.active .step-num { opacity: 1; }
+    .step-title { font-family: var(--font-serif); font-size: 30px; line-height: 1.3; font-weight: 400; }
+    .step-desc { font-size: 22px; font-weight: 300; color: var(--muted); line-height: 1.5; }
+    .step-arrow {
+      position: absolute; right: -18px; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px;
+      background: var(--bg-alt); border: 1px solid var(--rule); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--muted); z-index: 1;
+    }
+    .step-card:last-child .step-arrow { display: none; }
+
+    /* ══ SLIDE 5 — PERMISSION MODES ══════════════════════ */
+    #s5 { background: var(--bg); }
+    #s5 .perm-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      margin-top: var(--gap-title); flex: 1; align-items: stretch;
+    }
+    .perm-col { padding: 64px 72px; display: flex; flex-direction: column; gap: 28px; }
+    .perm-col-left  { border: 1px solid rgba(233,168,76,0.25); border-right: none; background: var(--amber-dim); }
+    .perm-col-right { border: 1px solid rgba(78,184,173,0.25); background: var(--teal-dim); }
+    .perm-badge {
+      font-size: var(--t-label); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding-bottom: 24px; border-bottom: 1px solid var(--rule);
+    }
+    .perm-col-left .perm-badge { color: var(--amber); }
+    .perm-col-right .perm-badge { color: var(--teal); }
+    .perm-headline { font-family: var(--font-serif); font-size: var(--t-h2); line-height: 1.2; font-weight: 400; }
+    .perm-desc { font-size: var(--t-small); font-weight: 300; color: var(--muted); line-height: 1.6; }
+    .perm-note {
+      margin-top: auto;
+      font-size: var(--t-label); font-weight: 400; color: var(--muted);
+      padding: 20px 28px; border: 1px solid var(--rule); line-height: 1.5;
+    }
+    .perm-col-left .perm-note  { border-color: rgba(233,168,76,0.2); }
+    .perm-col-right .perm-note { border-color: rgba(78,184,173,0.2); }
+
+    /* ══ SLIDE 6 — USE CASES ══════════════════════════════ */
+    #s6 { background: var(--bg-alt); }
+    #s6 .uc-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+      margin-top: var(--gap-title); flex: 1;
+    }
+    .uc-col {
+      padding: 52px 56px; border: 1px solid var(--rule); border-right: none;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+    .uc-col:last-child { border-right: 1px solid var(--rule); }
+    .uc-col-label {
+      font-size: var(--t-label); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--amber); padding-bottom: 20px; border-bottom: 1px solid var(--rule);
+    }
+    .uc-col:nth-child(3) .uc-col-label { color: var(--teal); }
+    .uc-list { list-style: none; display: flex; flex-direction: column; gap: 24px; }
+    .uc-list li {
+      font-size: var(--t-small); font-weight: 300; color: var(--text);
+      line-height: 1.5; padding-left: 28px; position: relative;
+    }
+    .uc-list li::before { content: '—'; position: absolute; left: 0; color: var(--amber); opacity: 0.6; }
+    .uc-col:nth-child(3) .uc-list li::before { color: var(--teal); }
+    .uc-list .note { font-size: 21px; color: var(--muted); display: block; margin-top: 4px; }
+
+    /* ══ SLIDE 7 — COMPARISON TABLE ══════════════════════ */
+    #s7 { background: var(--bg); padding-top: 56px; padding-bottom: 56px; }
+    #s7 .table-wrap { margin-top: 36px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .cmp-table { width: 100%; border-collapse: collapse; }
+    .cmp-table th, .cmp-table td {
+      text-align: left; padding: 13px 36px;
+      border-bottom: 1px solid var(--rule);
+      font-size: var(--t-label); line-height: 1.4; vertical-align: top;
+    }
+    .cmp-table thead th {
+      font-size: var(--t-label); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding-bottom: 12px; border-bottom: 2px solid var(--rule);
+    }
+    .cmp-table .th-amber { color: var(--amber); }
+    .cmp-table .th-teal  { color: var(--teal); }
+    .cmp-table .th-dim   { color: var(--muted); font-weight: 400; letter-spacing: 0; text-transform: none; font-size: var(--t-small); }
+    .cmp-table tbody tr:last-child td { border-bottom: none; }
+    .cmp-table .cat { font-weight: 500; color: var(--muted); white-space: nowrap; }
+    .cmp-table .val { color: var(--text); font-weight: 300; }
+    .cmp-table tbody tr { cursor: pointer; transition: background 180ms; }
+    .cmp-table tbody tr:hover td { background: rgba(242,236,228,0.04); }
+    .cmp-table tbody tr.row-focused td { background: rgba(242,236,228,0.07); }
+    .cmp-table thead th:hover { opacity: 0.8; cursor: pointer; }
+
+    /* ══ SLIDE 8 — SUMMARY / CLOSE ════════════════════════ */
+    #s8 { justify-content: center; position: relative; overflow: hidden; }
+    #s8::before {
+      content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+      width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,168,76,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #s8 .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-top: 44px; }
+    #s8 .sum-col { padding: 48px 60px; border: 1px solid var(--rule); border-right: none; }
+    #s8 .sum-col:last-child { border-right: 1px solid var(--rule); }
+    #s8 .sum-label {
+      font-size: var(--t-label); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px;
+    }
+    #s8 .sum-label.a { color: var(--amber); }
+    #s8 .sum-label.t { color: var(--teal); }
+    #s8 .sum-text { font-family: var(--font-serif); font-size: var(--t-h3); line-height: 1.35; font-weight: 400; }
+
+    /* ── Back button (matches original) ── */
+    #__bundler_back_home {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10001;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      color: rgba(190, 220, 255, 0.58);
+      text-decoration: none;
+      border: 1px solid rgba(96, 165, 250, 0.18);
+      border-radius: 999px;
+      background: rgba(12, 11, 10, 0.38);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
+      transition: transform 0.25s ease, color 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+    #__bundler_back_home:hover {
+      color: rgba(235, 245, 255, 0.96);
+      border-color: rgba(96, 165, 250, 0.55);
+      background: rgba(25, 40, 64, 0.55);
+      transform: translateX(-2px);
+      box-shadow: 0 0 18px rgba(96, 165, 250, 0.18);
+    }
+    #__bundler_back_home svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      fill: currentColor;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp  { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+    [data-anim].anim-in {
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+      animation-duration: 520ms;
+    }
+    [data-anim="fadeUp"].anim-in  { animation-name: fadeUp; }
+    [data-anim="fadeIn"].anim-in  { animation-name: fadeIn; }
+    [data-anim="scaleIn"].anim-in { animation-name: scaleIn; }
+  </style>
+</head>
+<body>
+
+<a id="__bundler_back_home" href="https://jy1920a.github.io/BeansOnCaffeine/main.html" aria-label="Back to main page" title="Back to main page">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 5.3a1 1 0 0 1 0 1.4L10.41 11H20a1 1 0 1 1 0 2h-9.59l4.3 4.3a1 1 0 0 1-1.42 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.41 0Z"/></svg>
+</a>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ══ SLIDE 1: TITLE ══ -->
+  <section id="s1" data-label="Title">
+    <div class="kicker" data-anim="fadeUp">Claude · Desktop feature</div>
+    <h1 data-anim="fadeUp">Get started with<br><em>Claude Cowork</em></h1>
+    <p class="tagline" data-anim="fadeUp">Agentic, multi-step task execution on your desktop — with local file access, scheduled runs, and sub-agent coordination.</p>
+    <div class="badge-row" data-anim="fadeUp">
+      <div class="badge hi">Pro</div>
+      <div class="badge hi">Max</div>
+      <div class="badge hi">Team</div>
+      <div class="badge hi">Enterprise</div>
+      <div class="badge">macOS · Windows</div>
+    </div>
+    <div class="divider-line"></div>
+  </section>
+
+  <!-- ══ SLIDE 2: THREE-PILLAR OVERVIEW ══ -->
+  <section id="s2" data-label="Core Model">
+    <div class="eyebrow" data-anim="fadeUp">Overview</div>
+    <div class="slide-title" data-anim="fadeUp">Three things make Cowork different</div>
+    <div class="three-col">
+      <div class="col col-a" data-anim="fadeUp">
+        <div class="col-label">Agentic execution</div>
+        <div class="col-headline">Claude plans and acts — not just responds</div>
+        <div class="col-desc">Describe an outcome, step away, and come back to finished work. Cowork handles planning, sub-task coordination, and delivery autonomously using the same architecture as Claude Code.</div>
+      </div>
+      <div class="col col-b" data-anim="fadeUp">
+        <div class="col-label">Local file access</div>
+        <div class="col-headline">Direct read and write to your machine</div>
+        <div class="col-desc">Claude accesses files in the folders you connect — no uploads, no downloads. Finished outputs land exactly where they belong on your file system.</div>
+      </div>
+      <div class="col col-c" data-anim="fadeUp">
+        <div class="col-label">Scheduling &amp; projects</div>
+        <div class="col-headline">Work runs even when you're not there</div>
+        <div class="col-desc">Schedule recurring tasks to run automatically on a cadence you define. Group related tasks into Projects with persistent files, instructions, and memory.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 3: WHAT IS COWORK (definition + traits) ══ -->
+  <section id="s3" data-label="Cowork Defined">
+    <div class="rule" data-anim="fadeIn"></div>
+    <div class="eyebrow" data-anim="fadeUp">Feature 01 · Paid plans · macOS &amp; Windows</div>
+    <div class="slide-title" data-anim="fadeUp">Cowork</div>
+    <div class="content">
+      <div class="big-def" data-anim="fadeUp">
+        Claude's agentic<br>architecture — now<br>accessible without<br><em>opening a terminal.</em>
+      </div>
+      <div class="traits">
+        <div class="trait amber" data-anim="fadeUp">
+          <div class="trait-title">Multi-step task execution</div>
+          <div class="trait-desc">Describe an outcome, step away, and come back to finished work. Cowork handles planning, sub-task coordination, and delivery without prompting at each step.</div>
+        </div>
+        <div class="trait amber" data-anim="fadeUp">
+          <div class="trait-title">Direct local file access</div>
+          <div class="trait-desc">Claude reads and writes to your local files directly — no uploads, no downloads. Outputs land exactly where you need them in your file system.</div>
+        </div>
+        <div class="trait amber" data-anim="fadeUp">
+          <div class="trait-title">Scheduled &amp; recurring tasks</div>
+          <div class="trait-desc">Set tasks to run automatically on a cadence or on demand. The desktop app handles execution while you focus on other work.</div>
+        </div>
+        <div class="trait teal" data-anim="fadeUp">
+          <div class="trait-title">Projects in Cowork</div>
+          <div class="trait-desc">Organize related tasks into persistent workspaces with their own files, context, instructions, and memory — making Cowork more powerful for long-running work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 4: HOW IT WORKS ══ -->
+  <section id="s4" data-label="How It Works">
+    <div class="eyebrow" data-anim="fadeUp">Process</div>
+    <div class="slide-title" data-anim="fadeUp">How Cowork runs your tasks</div>
+    <div class="steps-grid" data-anim="fadeUp">
+      <div class="step-card" onclick="activateStep(this)">
+        <div class="step-num">01</div>
+        <div class="step-title">Analyzes &amp; plans</div>
+        <div class="step-desc">Claude reads the task, identifies scope, and designs a structured approach before acting on anything.</div>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-card" onclick="activateStep(this)">
+        <div class="step-num">02</div>
+        <div class="step-title">Breaks into subtasks</div>
+        <div class="step-desc">Complex requests are decomposed into discrete, executable steps with clear dependencies.</div>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-card" onclick="activateStep(this)">
+        <div class="step-num">03</div>
+        <div class="step-title">Runs code in isolated VM</div>
+        <div class="step-desc">Shell commands and code execute safely inside a virtual machine on your computer, separate from your OS.</div>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-card" onclick="activateStep(this)">
+        <div class="step-num">04</div>
+        <div class="step-title">Coordinates parallel workstreams</div>
+        <div class="step-desc">Multiple sub-agents run simultaneously to accelerate complex multi-part work where appropriate.</div>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-card" onclick="activateStep(this)">
+        <div class="step-num">05</div>
+        <div class="step-title">Delivers finished outputs</div>
+        <div class="step-desc">Results land directly in your file system — spreadsheets, decks, reports, and organized folders.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 5: PERMISSION MODES ══ -->
+  <section id="s5" data-label="Permission Modes">
+    <div class="eyebrow" data-anim="fadeUp">Control &amp; safety</div>
+    <div class="slide-title" data-anim="fadeUp">Two permission modes</div>
+    <div class="perm-grid" data-anim="fadeUp">
+      <div class="perm-col perm-col-left">
+        <div class="perm-badge">⏸ Ask before acting</div>
+        <div class="perm-headline">Claude pauses for<br>your approval at<br>each action.</div>
+        <div class="perm-desc">The safer default. Use when working with new tools, unfamiliar file trees, or anything you want to supervise closely. Every step is visible and stoppable before it runs.</div>
+        <div class="perm-note">Best for: first-time tasks, sensitive folders, unfamiliar MCPs, or workflows where oversight matters more than speed.</div>
+      </div>
+      <div class="perm-col perm-col-right">
+        <div class="perm-badge">▶ Act without asking</div>
+        <div class="perm-headline">Claude works end-<br>to-end without<br>stopping for review.</div>
+        <div class="perm-desc">Faster execution for trusted workflows. Use only when actively supervising and working with known files, folders, and sites you trust.</div>
+        <div class="perm-note">In both modes: Claude always requires explicit permission before permanently deleting any files. Deletion protection cannot be disabled.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 6: USE CASES ══ -->
+  <section id="s6" data-label="Use Cases">
+    <div class="eyebrow" data-anim="fadeUp">Example use cases</div>
+    <div class="slide-title" data-anim="fadeUp">Built for complex, multi-step work</div>
+    <div class="uc-grid" data-anim="fadeUp">
+      <div class="uc-col">
+        <div class="uc-col-label">Files &amp; Documents</div>
+        <ul class="uc-list">
+          <li>Organize Downloads by type and date
+            <span class="note">Sort hundreds of files into categorized folders automatically.</span>
+          </li>
+          <li>Process receipts into formatted expense reports
+            <span class="note">Drop files in a folder; Claude generates the report.</span>
+          </li>
+          <li>Batch rename files with consistent patterns
+            <span class="note">YYYY-MM-DD formats, project prefixes, sequential numbering.</span>
+          </li>
+          <li>Turn voice memos and scattered notes into polished documents</li>
+        </ul>
+      </div>
+      <div class="uc-col">
+        <div class="uc-col-label">Research &amp; Analysis</div>
+        <ul class="uc-list">
+          <li>Synthesize web searches, articles, and notes into coherent reports</li>
+          <li>Extract themes and action items from meeting transcripts
+            <span class="note">Interviews, lectures, and recorded calls.</span>
+          </li>
+          <li>Analyze personal notes for patterns and connections
+            <span class="note">Journals, research files, PKM vaults.</span>
+          </li>
+          <li>Statistical analysis: outlier detection, time-series, cross-tabs</li>
+        </ul>
+      </div>
+      <div class="uc-col">
+        <div class="uc-col-label">Data &amp; Presentations</div>
+        <ul class="uc-list">
+          <li>Excel with VLOOKUP, conditional formatting, multiple tabs
+            <span class="note">Working spreadsheets ready to edit — not just CSVs.</span>
+          </li>
+          <li>Slide decks generated from rough notes or transcripts</li>
+          <li>Charts and graphs from local data files</li>
+          <li>Clean, transform, and process large datasets end-to-end</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 7: AVAILABILITY TABLE ══ -->
+  <section id="s7" data-label="At a Glance">
+    <div class="eyebrow" data-anim="fadeUp">Requirements &amp; limits</div>
+    <div class="slide-title" data-anim="fadeUp">At a glance</div>
+    <div class="table-wrap" data-anim="fadeUp">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th class="th-dim" style="width:22%">Dimension</th>
+            <th class="th-amber">Details</th>
+            <th class="th-teal">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="cat">Plans</td><td class="val">Pro, Max, Team, Enterprise</td><td class="val">Not available on free plans</td></tr>
+          <tr><td class="cat">Platforms</td><td class="val">macOS · Windows (desktop app required)</td><td class="val">Not available on web or mobile browsers</td></tr>
+          <tr><td class="cat">Usage cost</td><td class="val">Higher than standard chat</td><td class="val">Multi-step tasks are compute-intensive; use standard chat for simpler work</td></tr>
+          <tr><td class="cat">Session requirement</td><td class="val">Desktop app must stay open</td><td class="val">Closing the app or sleeping the computer ends active tasks</td></tr>
+          <tr><td class="cat">Memory</td><td class="val">Supported within Projects only</td><td class="val">Not retained across standalone Cowork sessions</td></tr>
+          <tr><td class="cat">Audit / Compliance</td><td class="val">Not in Audit Logs or Data Exports</td><td class="val">Do not use for regulated workloads; OTel monitoring available for admins</td></tr>
+          <tr><td class="cat">Sharing</td><td class="val">Sessions cannot be shared</td><td class="val">No chat or artifact sharing across users</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 8: SUMMARY / CLOSE ══ -->
+  <section id="s8" data-label="Summary">
+    <div class="eyebrow" data-anim="fadeUp">Summary</div>
+    <div class="slide-title" data-anim="fadeUp">The Cowork difference</div>
+    <div class="summary-grid" data-anim="fadeUp">
+      <div class="sum-col">
+        <div class="sum-label a">Agentic by design</div>
+        <div class="sum-text">Claude plans, executes, and coordinates sub-agents — it doesn't just respond to prompts.</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-label a">Your files, your machine</div>
+        <div class="sum-text">Direct local file access, no uploads, and outputs that land exactly where they belong.</div>
+      </div>
+      <div class="sum-col">
+        <div class="sum-label t">You stay in control</div>
+        <div class="sum-text">Choose how much oversight you want. Deletion always requires your explicit approval.</div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script>
+// ── Entrance animations ──────────────────────────────────
+function triggerAnims(slide) {
+  if (!slide) return;
+  slide.querySelectorAll('[data-anim]').forEach((el, i) => {
+    el.classList.remove('anim-in');
+    void el.offsetWidth;
+    el.style.animationDelay = (i * 70) + 'ms';
+    el.classList.add('anim-in');
+  });
+}
+function resetAnims(slide) {
+  if (!slide) return;
+  slide.querySelectorAll('[data-anim]').forEach(el => {
+    el.classList.remove('anim-in');
+    el.style.animationDelay = '';
+  });
+  slide.querySelectorAll('.trait.expanded').forEach(t => t.classList.remove('expanded'));
+  slide.querySelectorAll('.step-card.active').forEach(c => c.classList.remove('active'));
+}
+const animObserver = new MutationObserver((mutations) => {
+  mutations.forEach(m => {
+    if (m.attributeName === 'data-deck-active') {
+      const el = m.target;
+      if (el.hasAttribute('data-deck-active')) triggerAnims(el);
+      else resetAnims(el);
+    }
+  });
+});
+function observeSlides() {
+  document.querySelectorAll('deck-stage > section').forEach(s => {
+    animObserver.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    if (s.hasAttribute('data-deck-active')) triggerAnims(s);
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => setTimeout(observeSlides, 50));
+} else {
+  setTimeout(observeSlides, 50);
+}
+
+// ── Step card interaction ──────────────────────────────
+function activateStep(card) {
+  card.closest('.steps-grid').querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+}
+
+// ── Trait accordion ────────────────────────────────────
+document.querySelectorAll('.trait').forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasExpanded = card.classList.contains('expanded');
+    card.closest('section').querySelectorAll('.trait').forEach(t => t.classList.remove('expanded'));
+    if (!wasExpanded) card.classList.add('expanded');
+  });
+});
+
+// ── Table row highlight ────────────────────────────────
+const cmpTable = document.querySelector('.cmp-table');
+if (cmpTable) {
+  cmpTable.querySelectorAll('tbody tr').forEach(row => {
+    row.addEventListener('click', () => {
+      const focused = row.classList.contains('row-focused');
+      cmpTable.querySelectorAll('tbody tr').forEach(r => r.classList.remove('row-focused'));
+      if (!focused) row.classList.add('row-focused');
+    });
+  });
+}
+
+// ── Enter to advance ───────────────────────────────────
+window.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const t = e.target;
+  if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  document.querySelector('deck-stage').next();
+}, true);
+</script>
+</body>
+</html>
